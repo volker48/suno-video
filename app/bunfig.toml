@@ -1,0 +1,4 @@
+[install]
+# Only install package versions published at least 24 h ago (seconds). Bun never runs
+# dependency lifecycle scripts unless they are listed in package.json trustedDependencies.
+minimumReleaseAge = 86400
