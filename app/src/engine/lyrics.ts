@@ -1,5 +1,6 @@
-// Word-timed lyrics (data/lyrics.json) with queries for karaoke rendering.
+// Word-timed lyrics (songs/<slug>/data/lyrics.json) with queries for karaoke rendering.
 import { smart } from './type';
+import type { Song } from '../song';
 
 export interface Word {
   w: string; // display token (punctuation attached, typographic quotes: don’t, ’cause)
@@ -15,6 +16,9 @@ export interface Word {
 export interface Line {
   i: number;
   text: string;
+  /** The lyrics.txt section header as written ('Pre-Chorus'), and a unique id per section instance ('prechorus2'). */
+  section: string;
+  part: string;
   start: number;
   end: number;
   words: Word[];
@@ -36,12 +40,8 @@ export class Lyrics {
     this.words.forEach((w, i) => (w.gi = i));
   }
 
-  static async load(): Promise<Lyrics> {
-    for (const url of ['data/lyrics.json', 'data/lyrics.approx.json']) {
-      const r = await fetch(url);
-      if (r.ok && (r.headers.get('content-type') ?? '').includes('json')) return new Lyrics(await r.json());
-    }
-    throw new Error('no lyrics data found');
+  static async load(song: Song): Promise<Lyrics> {
+    return new Lyrics(await song.json('data/lyrics.json'));
   }
 
   /** The line being sung at t (or null in gaps). */
@@ -79,7 +79,7 @@ export class Lyrics {
     for (const w of this.words) if (w.start <= t) best = w;
     return best;
   }
-  /** Words whose normalized text matches (e.g. 'p(doom)'). */
+  /** Words whose normalized text matches (e.g. 'gryffy,' matches 'Gryffy'). */
   findWords(s: string): Word[] {
     const q = norm(s);
     return this.words.filter((w) => norm(w.w) === q);

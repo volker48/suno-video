@@ -1,7 +1,9 @@
 // Entry: preview player (default) or export mode (?export=1, driven by scripts/render.ts).
+// ?song=<slug> picks the song folder (optional with a single song).
 import { Engine, type AdaptiveSampling } from './engine/engine';
 import { PW, PH, SCALE } from './engine/gl';
-import { makeTimeline } from './timeline';
+import { timelineFor } from './timeline';
+import { loadSong, pickSong, type Song } from './song';
 
 const params = new URLSearchParams(location.search);
 const EXPORT = params.has('export');
@@ -13,27 +15,32 @@ const canvas = document.getElementById('c') as HTMLCanvasElement;
 canvas.width = PW;
 canvas.height = PH;
 
-const engine = new Engine(canvas, makeTimeline);
+let engine: Engine;
 
 declare global {
-  interface Window { __pdoom: any }
+  interface Window { __video: any }
 }
 
-let TIMELINE: typeof engine.timeline = [];
+let TIMELINE: Engine['timeline'] = [];
 
 async function boot() {
+  const song = await loadSong(pickSong(params.get('song')));
+  document.title = song.meta.title;
+  engine = new Engine(canvas, await timelineFor(song.slug));
   const onlySet = ONLY ? new Set(ONLY.split(',')) : null;
-  await engine.init(onlySet ? (e) => onlySet.has(e.id) : undefined);
+  await engine.init(song, onlySet ? (e) => onlySet.has(e.id) : undefined);
   TIMELINE = engine.timeline;
-  if (EXPORT) setupExport();
-  else setupPlayer();
+  if (EXPORT) setupExport(song);
+  else setupPlayer(song);
 }
 
 // ------------------------------------------------------------------ export API
-function setupExport() {
+function setupExport(song: Song) {
   document.body.classList.add('export');
-  window.__pdoom = {
+  window.__video = {
     engine,
+    /** Song folder name (the renderer muxes songs/<song>/song.mp3). */
+    song: song.slug,
     duration: engine.duration,
     errors: engine.errors,
     /** Output size in px (1920x1080 times scale); stream() sends frames of width*height*4 bytes. */
@@ -90,12 +97,12 @@ function setupExport() {
       return used;
     },
   };
-  window.__pdoom.ready = true;
+  window.__video.ready = true;
 }
 
 // ------------------------------------------------------------------ preview player
-function setupPlayer() {
-  const audio = new Audio('audio/pdoom.mp3');
+function setupPlayer(song: Song) {
+  const audio = new Audio(song.url('song.mp3'));
   audio.preload = 'auto';
   const ui = document.getElementById('ui')!;
   const scrub = document.getElementById('scrub') as HTMLInputElement;
@@ -169,7 +176,7 @@ function setupPlayer() {
     import.meta.hot.on('vite:afterUpdate', (payload: any) => {
       for (const u of payload.updates ?? []) {
         const m = /scenes\/([\w-]+)\.ts/.exec(u.path ?? '');
-        if (m) for (const e of TIMELINE) if (e.id === m[1] || (e as any).file === m[1]) engine.reload(e.id);
+        if (m) for (const e of TIMELINE) if (e.id === m[1] || e.module === m[1]) engine.reload(e.id);
       }
     });
   }
@@ -178,5 +185,5 @@ function setupPlayer() {
 boot().catch((e) => {
   console.error(e);
   document.body.insertAdjacentHTML('beforeend', `<pre style="color:#f55;position:fixed;top:0;left:0">${String(e?.stack ?? e)}</pre>`);
-  window.__pdoom = { error: String(e?.stack ?? e) };
+  window.__video = { error: String(e?.stack ?? e) };
 });

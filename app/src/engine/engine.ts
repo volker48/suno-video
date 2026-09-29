@@ -5,19 +5,20 @@ import { AudioData } from './audio';
 import { Lyrics } from './lyrics';
 import { Compositor, FSPass, W, H, PW, PH, SCALE, SS_TAP, makeRT, clearRT } from './gl';
 import { DEFAULT_POST, Post, SHOULDER_GLSL, type PostParams } from './post';
-import { Hud, PDoom, type Caption } from './hud';
+import { Hud } from './hud';
 import type { Frame, Scene, SceneClass, SceneCtx, PostOverrides } from './scene';
 import { loadFonts } from './type';
 import { loadStrokeFonts } from './stroke';
+import type { Song } from '../song';
 
 export interface TimelineEntry {
   id: string;
   /** Lazy module loader; the module's default export is the Scene class. */
   load: () => Promise<{ default: SceneClass }>;
+  /** Scene module file name without extension, for hot reload in the preview. */
+  module?: string;
   start: number;
   end: number;
-  /** Plate caption shown bottom-right at the start of this entry. */
-  caption?: { fig: string; text: string; dur?: number; delay?: number };
   /** Default post overrides for this entry (the scene's own overrides win). */
   post?: PostOverrides;
   /** Free-form params handed to the scene as ctx.params. */
@@ -79,12 +80,12 @@ export class Engine {
   private lastT = -1;
   lastPost: PostParams = { ...DEFAULT_POST };
   errors: string[] = [];
-  /** Suppress the HUD (captions, crop marks) — used when rendering plate thumbnails. */
+  /** Suppress the HUD (crop marks). */
   hudOff = false;
 
   timeline: TimelineEntry[] = [];
 
-  constructor(public canvas: HTMLCanvasElement, private makeTimeline: (lyrics: Lyrics, audio: AudioData) => TimelineEntry[]) {
+  constructor(public canvas: HTMLCanvasElement, private makeTimeline: (lyrics: Lyrics, audio: AudioData, song: Song) => TimelineEntry[]) {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(PW, PH, false);
@@ -138,16 +139,12 @@ export class Engine {
       }`, { e: { value: null } });
   }
 
-  async init(only?: (e: TimelineEntry) => boolean) {
-    [this.audio, this.lyrics] = await Promise.all([AudioData.load(), Lyrics.load(), loadFonts(), loadStrokeFonts()]) as [AudioData, Lyrics, void, void];
-    this.timeline = this.makeTimeline(this.lyrics, this.audio);
-    this.ctx = { renderer: this.renderer, audio: this.audio, lyrics: this.lyrics, comp: this.comp, W, H, id: '', params: {}, start: 0, end: 0 };
+  async init(song: Song, only?: (e: TimelineEntry) => boolean) {
+    [this.audio, this.lyrics] = await Promise.all([AudioData.load(song), Lyrics.load(song), loadFonts(), loadStrokeFonts()]) as [AudioData, Lyrics, void, void];
+    this.timeline = this.makeTimeline(this.lyrics, this.audio, song);
+    this.ctx = { renderer: this.renderer, song, audio: this.audio, lyrics: this.lyrics, comp: this.comp, W, H, id: '', params: {}, start: 0, end: 0 };
     this.post = new Post();
-    const captions: Caption[] = this.timeline.filter((e) => e.caption).map((e) => {
-      const d = e.caption!.delay ?? 0.3;
-      return { start: e.start + d, end: e.start + d + (e.caption!.dur ?? 4.5), fig: e.caption!.fig, text: e.caption!.text };
-    });
-    this.hud = new Hud(new PDoom(this.lyrics), captions);
+    this.hud = new Hud();
     const entries = only ? this.timeline.filter(only) : this.timeline;
     await Promise.all(entries.map((e) => this.loadEntry(e)));
   }
@@ -266,7 +263,7 @@ export class Engine {
       outTex = this.avgRT.texture;
     }
     this.lastSamples = n;
-    const hudTex = this.hud.draw(t, { opacity: this.hudOff ? 0 : post.hud, frame: post.frame, readout: post.pdoom, paper: post.paper, pdoomOverride: post.pdoomText, corruption: post.hudCorruption });
+    const hudTex = this.hud.draw({ opacity: this.hudOff ? 0 : post.hud, frame: post.frame, paper: post.paper });
     this.post.render(r, outTex, hudTex, this.finalRT, post, t);
     this.lastPost = post;
     if (toScreen) {

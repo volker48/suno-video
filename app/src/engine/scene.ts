@@ -6,9 +6,12 @@ import type { AudioData, AudioSample } from './audio';
 import type { Lyrics } from './lyrics';
 import type { Compositor } from './gl';
 import type { PostParams } from './post';
+import type { Song } from '../song';
 
 export interface SceneCtx {
   renderer: THREE.WebGLRenderer;
+  /** The song folder (slug, song.json metadata such as the title). */
+  song: Song;
   audio: AudioData;
   lyrics: Lyrics;
   comp: Compositor;

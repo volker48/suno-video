@@ -4,20 +4,22 @@ The video is a web app (`app/`, TypeScript + three.js, run with bun + Vite) that
 
 ## Running things
 
+- Every command takes the song: `?song=<slug>` in the browser, `--song <slug>` for `render.ts` (both optional while `songs/` holds one song).
 - Dev server (probably already running): `cd app && bunx vite --port 5173`. Preview: http://localhost:5173/?t=23.0 (space = play/pause, ←/→ = ±1 s, shift = ±5 s, `,`/`.` = ±1 frame, `[`/`]` = previous/next timeline entry, `l` = loop the current entry, `h` = hide the UI).
-- Stills (the main way to check your work — then LOOK at the PNGs with the Read tool): `cd app && bun scripts/render.ts stills --t 12.5,13.0,14.2 --only open --out ../out/wip/open`
-- Contact sheet of a time range: `bun scripts/render.ts sheet --from 1.5 --to 9 --n 16 --cols 4 --only open --out ../out/wip/open/sheet.png`
-- Short video clip (to judge motion: extract frames with ffmpeg, or just trust the math): `bun scripts/render.ts video --from 20 --to 25 --only hook --out ../out/wip/hook.mp4 --preset veryfast`
-- `--only a,b` loads only those timeline entries (fast, and isolates you from other people's broken scenes). Without a matching entry nothing renders (black), so the entry must exist in `src/timeline.ts`.
+- Stills (the main way to check your work — then LOOK at the PNGs with the Read tool): `cd app && bun scripts/render.ts stills --t 12.5,13.0,14.2 --only chorus1 --out ../out/wip/chorus1`
+- Contact sheet of a time range: `bun scripts/render.ts sheet --from 1.5 --to 9 --n 16 --cols 4 --only chorus1 --out ../out/wip/chorus1/sheet.png`
+- Short video clip (to judge motion: extract frames with ffmpeg, or just trust the math): `bun scripts/render.ts video --from 20 --to 25 --only chorus1 --out ../out/wip/chorus1.mp4 --preset veryfast`
+- `--only a,b` loads only those timeline entries (fast, and isolates you from other people's broken scenes). Without a matching entry nothing renders (black), so the entry must exist in the song's timeline (see "Songs, timelines and scenes").
 - Typecheck just your files: `bunx tsc --noEmit -p tsconfig.json 2>&1 | grep scenes/yourscene`.
 - The render script prints `SCENE ERRORS` and browser console errors — read them.
 - 4K: add `--scale 2` to any mode (`stills` then saves full-resolution 3840×2160 PNGs). Check your scene at both scales: downscaled, the 4K frame should look like the 1080p one, only sharper.
-- Renders while files are being edited: run a server without live reload (`PDOOM_NO_HMR=1 bunx vite --port 5190`) and pass `--url http://localhost:5190`; a live-reloading server reloads the page mid-render. The private server that `render.ts` starts when none is reachable already runs without it.
+- Renders while files are being edited: run a server without live reload (`VIDEO_NO_HMR=1 bunx vite --port 5190`) and pass `--url http://localhost:5190`; a live-reloading server reloads the page mid-render. The private server that `render.ts` starts when none is reachable already runs without it.
 
 ## Data
 
-- `lyrics` (`src/engine/lyrics.ts`): `lines[]` with `text,start,end,words[]`, each word `{w,start,end}` (word-level, aligned to the vocal). Find lines by content, never hard-code times: `const l = this.ctx.lyrics.get('sudden drop')` → `l.words[3].start`. Helpers: `Lyrics.wordProgress(word, t)` (0..1 sung progress), `Lyrics.lineCharProgress(line, t)` (chars sung so far — for per-glyph wipes), `lyrics.findWords('P(doom)')`.
-- `audio` (`src/engine/audio.ts`): `beats[]`, `downbeats[]`, `sections[]`, `beatAt(t)` (continuous beat index), `barAt(t)`, `timeOfBeat(i)`, `nearestBeat(t)`, `events('kick'|'snare'|'hat'|'vocal', t0, t1)`, `env(name, t)` for `rms|low|mid|high|vocal|drums|bass|other` (0..1), `hit(kind, t, halfLife)` decaying pulses.
+- The files come from `songs/<slug>/data/` (produced by `analysis/pipeline.py`); `ctx.song.meta` is the song's `song.json` (title, artist).
+- `lyrics` (`src/engine/lyrics.ts`): `lines[]` with `text,section,part,start,end,words[]` (`section` = the lyrics.txt header, `part` = its unique id such as `chorus2`, matching `audio.sections[].name`), each word `{w,start,end}` (word-level, aligned to the vocal). Find lines by content, never hard-code times: `const l = this.ctx.lyrics.get('tear up the floor')` → `l.words[3].start`. Helpers: `Lyrics.wordProgress(word, t)` (0..1 sung progress), `Lyrics.lineCharProgress(line, t)` (chars sung so far — for per-glyph wipes), `lyrics.findWords('Gryffy')`.
+- `audio` (`src/engine/audio.ts`): `beats[]`, `downbeats[]`, `sections[]` (`{name, label, start, end}` on downbeats), `beatAt(t)` (continuous beat index), `barAt(t)`, `timeOfBeat(i)`, `nearestBeat(t)`, `events('kick'|'snare'|'hat'|'vocal', t0, t1)`, `env(name, t)` for `rms|low|mid|high|vocal|drums|bass|other` (0..1), `hit(kind, t, halfLife)` decaying pulses.
 - Every `Frame` already carries `f.a` = `{rms,low,mid,high,vocal,drums,bass,other,kick,snare,hat,vonset}` and `f.beat,f.bar,f.beatPhase,f.barPhase`.
 
 ## Writing a scene
@@ -50,9 +52,9 @@ Rules:
 - `render()` must fully overwrite `out` (a HalfFloat linear-HDR target). Colours are **linear**; values > ~0.85 bloom. Use palette constants (`C_INK`, `C_BONE`, `C_SIGNAL`… in GLSL; `LIN.signal` in TS for GL; `rgba('signal', a)` for Canvas2D).
 - `ctx.params` holds the timeline entry's params (one module can serve several entries); `ctx.start/ctx.end` its window; `f.lt`/`f.p` local time/progress.
 - Transitions: by default the engine crossfades overlapping entries. For custom transitions set `handlesTransition = true` and composite `f.under` (the previous scene's frame) yourself using `f.tin` (0→1 over the overlap). Most cuts should be hard cuts on downbeats (no overlap) — that's the default when windows touch.
-- Post overrides you can return: `exposure, bloom, bloomThreshold, bloomKnee, bloomRadius, halation, ca, grain, vignette, hud (HUD opacity), fade, flash, shake:[x,y], zoom, invert, pdoomText, hudCorruption`. Defaults in `src/engine/post.ts`.
+- Post overrides you can return: `exposure, bloom, bloomThreshold, bloomKnee, bloomRadius, halation, ca, grain, vignette, hud (HUD opacity), fade, flash, shake:[x,y], zoom, invert, frame (crop marks), paper`. Defaults in `src/engine/post.ts`.
 - Performance: aim for < 25 ms/frame. Canvas2D layers cost ~2–4 ms to upload each; don't use more than 2–3 per scene. Precompute in `init()`.
-- Don't edit files outside your scene files (and your own helper files named `scenes/<name>-*.ts`). Engine changes: ask the lead (report in your final message what you'd need). Do not edit `src/timeline.ts`.
+- When several agents build scenes in parallel: each edits only its own scene files (and helpers named `<name>-*.ts` next to them); engine and timeline changes go through whoever leads the edit.
 
 ## Toolbox
 
@@ -68,7 +70,7 @@ Rules:
 - Lyrics come with typographic punctuation (`don’t`, `’cause`, `“Just`): `Word.w` and `Line.text` go through `smart()`; `lyrics.get()` matches straight or curly quotes. Hardcoded display strings use ’ “ ” … – — × − too. Mono text (IBM Plex Mono) is the UI/terminal voice and keeps typewriter quotes (`plain()` for a lyric shown as typed input).
 - No outlined or haloed type.
 - `util.ts`: `clamp, lerp, remap, smoothstep, ease.*, prog(x,a,b,ease), keys(t, [[t,v,ease],...]), springStep, pulse, mulberry32, hash, noise1/2/3, fbm1/2, polylineLengths, pointAtLength, window01`.
-- `hud.ts`: the global HUD (crop marks; optional captions from timeline entries, unused since revision 2; the bottom-left P(doom) readout is OFF unless a scene returns `post.pdoom > 0`). P(doom) is staged inside plates: `new PDoom(lyrics).value(t)`, `formatPDoom(v)`, and `drawReadout(ctx2d, x, y, v, {scale})` to draw the instrument anywhere. `PDoom.value(t)` is available as `engine.hud.pdoom` — if you need the value in a scene, recompute with `new PDoom(this.ctx.lyrics).value(t)`.
+- `hud.ts`: the global overlay: crop marks, off unless a scene returns `post.frame > 0` (ink on light plates with `post.paper`).
 
 ## Output scale (4K)
 
@@ -94,10 +96,13 @@ What this asks of scenes:
 - Sub-frames are rendered out of time order and in any number: a scene's output must depend on `f.t` only. `stateful` scenes can't be sampled adaptively (the engine refuses); nothing may count `render()` calls.
 - Per-frame flicker and jitter keyed to 60 fps must use `frameIdx(t)` (`util.ts`), not `Math.floor(t * 60)`. `frameIdx` is constant over the frame's shutter; `floor` switches at the frame's own time and double-exposes two states in every frame.
 - Noise that changes with continuous `t` (a hash seeded by time) is resampled in every sub-frame: it averages out, but slowly, and makes the adaptive sampler work harder. Seed it with `frameIdx(t)` unless it is meant to smooth out.
-- A spark emitter whose rate varies over time passes the rate as a function of the birth time, with its maximum (`sparkParticles(..., { rate: (tb) => ..., rateMax })`). A rate read at the current `t` re-times every particle from one sub-frame to the next.
+- A particle emitter whose rate varies over time must take the rate as a function of each particle's birth time (born at fixed, hashed times up to the rate's maximum). A rate read at the current `t` re-times every particle from one sub-frame to the next.
 - Shaders that supersample internally (4 rotated-grid taps) take `ssTap: SS_TAP` and `${SS_TAP_GLSL}` and loop `for (int k = ssK0(); k < ssK1(); k++) ... rgss(k)`, weighting by `ssWeight()`. The engine then hands each sub-frame one tap, cycling them (every set is a multiple of 4), which averages to the same image for a quarter of the cost. In the preview and single-sample stills they take all four.
 - Post parameters (shake, flash, zoom, fades, the HUD mode) are read at one point of the shutter, 1/8 of it after the frame's time (where the video was tuned, and a point every sample set includes); the HUD, grain and dither are drawn once per frame.
 
-## Shared motifs (`app/src/scenes/_motifs.ts`)
+## Songs, timelines and scenes
 
-Use these so recurring motifs look identical across plates: `sparkHead(lineBatch, x, y, t, scale, intensity)` + `sparkParticles(lineBatch, t, headAt, opts)` (the spark, drawn with a 2D additive `LineBatch`), `sparkHead2D` (Canvas2D fallback), and the mask: `drawMask2D(ctx, x, y, R, rot)`, `MASK` geometry constants and `GLSL_MASK` (`sdMaskInk(p)` in mask units, y down). Read-only for scene agents; ask the lead for changes.
+- `src/scenes/` holds scenes any song can use: `lyrics.ts` is the karaoke plate (word wipes, scrolling lines, title card for sections without lyrics; `params.label` picks its voice).
+- A song without its own edit plays `defaultTimeline` (`src/timeline.ts`): one `lyrics` entry per section of `data/audio.json`, starting early at the beat before a pickup so no line is split across a cut.
+- A bespoke edit lives in `src/songs/<slug>/timeline.ts` (default export `(lyrics, audio, song) => TimelineEntry[]`), with its scenes in `src/songs/<slug>/scenes/`. Build entries with `scene('<slug>/<name>')` or `scene('lyrics')` and anchor them with `cuts(lyrics, audio)`: `cut('first words of a line', nth)` is the beat at/before that line, `after(...)` the downbeat nearest its end. Mix shared and bespoke entries freely.
+- Recurring motifs of one song (a character, an object) go in a shared helper module in its `scenes/` folder so every plate draws them identically.

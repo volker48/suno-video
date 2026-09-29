@@ -1,4 +1,5 @@
-// Music analysis (data/audio.json) sampled at arbitrary song time.
+// Music analysis (songs/<slug>/data/audio.json) sampled at arbitrary song time.
+import type { Song } from '../song';
 
 export interface AudioJSON {
   duration: number;
@@ -6,10 +7,13 @@ export interface AudioJSON {
   fps: number;
   beats: number[];
   downbeats: number[];
-  sections: { name: string; start: number; end: number }[];
+  sections: Section[];
   features: Record<string, number[]>;
   onsets: Record<string, [number, number][]>;
 }
+
+/** A song section on the bar grid: `name` is unique ('chorus2', 'outro'), `label` the lyrics.txt header ('Chorus'). */
+export interface Section { name: string; label: string; start: number; end: number }
 
 export interface AudioSample {
   rms: number; low: number; mid: number; high: number;
@@ -25,7 +29,7 @@ export class AudioData {
   bpm: number;
   beats: number[];
   downbeats: number[];
-  sections: { name: string; start: number; end: number }[];
+  sections: Section[];
   private fps: number;
   private feat: Record<string, Float32Array> = {};
   onsets: Record<string, [number, number][]>;
@@ -42,12 +46,8 @@ export class AudioData {
     this.onsets = j.onsets ?? {};
   }
 
-  static async load(): Promise<AudioData> {
-    for (const url of ['data/audio.json', 'data/audio.approx.json']) {
-      const r = await fetch(url);
-      if (r.ok && (r.headers.get('content-type') ?? '').includes('json')) return new AudioData(await r.json());
-    }
-    throw new Error('no audio analysis data found');
+  static async load(song: Song): Promise<AudioData> {
+    return new AudioData(await song.json('data/audio.json'));
   }
 
   /** Linear-interpolated envelope value at time t. */

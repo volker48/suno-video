@@ -1,9 +1,14 @@
 import { defineConfig, normalizePath, type Plugin } from 'vite';
-import { cpSync } from 'node:fs';
+import { cpSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
-const assetDirs = ['audio', 'data'];
+const songsDir = path.join(repoRoot, 'songs');
+const assetDirs = ['songs'];
+/** Song folders (songs/<slug>/song.json): the app picks one with ?song=<slug>. */
+const songs = existsSync(songsDir)
+  ? readdirSync(songsDir).filter((s) => existsSync(path.join(songsDir, s, 'song.json'))).sort()
+  : [];
 
 // Git can check out directory symlinks as plain files on Windows. Serve the
 // original assets through Vite and copy them into builds without using symlinks.
@@ -31,8 +36,9 @@ export default defineConfig({
   root: '.',
   publicDir: 'public',
   plugins: [repoAssets()],
-  // PDOOM_NO_HMR=1: no live reload (export renders must not reload mid-run when a file changes)
-  server: { port: 5173, strictPort: false, hmr: process.env.PDOOM_NO_HMR ? false : undefined, fs: { allow: [repoRoot] } },
+  define: { __SONGS__: JSON.stringify(songs) },
+  // VIDEO_NO_HMR=1: no live reload (export renders must not reload mid-run when a file changes)
+  server: { port: 5173, strictPort: false, hmr: process.env.VIDEO_NO_HMR ? false : undefined, fs: { allow: [repoRoot] } },
   resolve: { alias: { '@root': repoRoot } },
   build: { target: 'esnext', assetsInlineLimit: 0 },
 });
