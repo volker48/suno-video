@@ -12,3 +12,8 @@ analysis/__pycache__/
 analysis/stems/
 analysis/work/
 analysis/qa/
+
+# project skills are part of the repo (a global gitignore may exclude .claude/); local settings stay out
+!/.claude/
+/.claude/*
+!/.claude/skills/
