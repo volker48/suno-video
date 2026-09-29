@@ -50,9 +50,12 @@ Steps: `stems` (ffmpeg decode + Demucs; prints the stem lag, expect ~0 and corre
 cd app && bun install --frozen-lockfile        # once; needs bun >= 1.4
 VIDEO_NO_HMR=1 bunx vite --port 5191 &         # a server without live reload for renders
 bun scripts/render.ts sheet --url http://localhost:5191 --song <slug> --times 1.5,25,60,100,150 --cols 3 --out ../out/wip/sheet.png
-bun scripts/render.ts video --song <slug> --samples auto --shutter 0.2   # -> out/<slug>.mp4
+bun scripts/render.ts video --url http://localhost:5191 --song <slug> --samples auto --shutter 0.2   # -> out/<slug>.mp4
 ```
 
+- Always pass `--url` to a server you started: without it `render.ts` uses whatever answers on port 5173 (possibly another project's dev server), and the page never boots. When piping the renderer's output, `set -o pipefail` so a failed render isn't reported as success.
+
+- Render a whole song in segments of about a minute (`--from/--to` on exact frame times, `--noaudio`). Then join them with ffmpeg's concat demuxer (`-c:v copy`) and mux `songs/<slug>/song.mp3` once as AAC. One headless page over a whole song can die partway through (it did at 94 s of 162 s), and a single audio mux avoids seams at the joins.
 - Look at the stills and sheets (Read tool) before rendering the full video. Check that the sung word matches the vocal at a few times from the QA table, especially the corrected lines.
 - A short clip with audio (`--from 23 --to 27 --preset veryfast`) proves sync cheaply; `ffprobe` it.
 - The interactive preview is http://localhost:5173/?song=<slug>&t=23 (the user can scrub it with the audio).
