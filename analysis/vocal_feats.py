@@ -2,7 +2,9 @@
 
 hop = 5 ms. Features: rms (dB), pyin f0 + voiced prob, spectral flux onset
 strength (log-mel), high-band (>2 kHz, consonant) energy, and a 'vocal
-presence' mask.
+presence' mask. Cached in work/<song>/vocal_feats.npz.
+
+Run:  SONG=<slug> uv run python vocal_feats.py
 """
 import common
 import numpy as np

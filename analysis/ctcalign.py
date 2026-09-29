@@ -11,22 +11,24 @@
 * Optional per-subword time windows ("anchors") constrain the path; used for
   manually verified hard spots.
 """
-import common  # noqa: F401
+import common
+import math
+
 import numpy as np
 import numba
 import torchaudio
 from pron import pron
 
 FRAME = 0.02  # s per emission frame
-N_FRAMES = 7833
 ALPHA = ["-"] + list("abcdefghijklmnopqrstuvwxyz'")
 AIDX = {c: i for i, c in enumerate(ALPHA)}
 
 
 def _common_logp(model):
     em = np.load(common.WORK / f"emission_{model}.npy").astype(np.float64)
-    if len(em) < N_FRAMES:
-        em = np.concatenate([em, np.repeat(em[-1:], N_FRAMES - len(em), 0)])
+    n_frames = math.ceil(common.duration() / FRAME)
+    if len(em) < n_frames:
+        em = np.concatenate([em, np.repeat(em[-1:], n_frames - len(em), 0)])
     if model.startswith("mms"):
         labs = list(torchaudio.pipelines.MMS_FA.get_labels(star=None))
     else:
@@ -44,7 +46,7 @@ def _common_logp(model):
 
 def emissions(kind):
     """kind: '<model>[_<source>]' with model in mms|lv60k|fused, source in
-    ''(demucs mono)|lead|vocL|vocR; or 'fused6' = mixture of both models on
+    ''(demucs mono)|vocL|vocR; or 'fused6' = mixture of both models on
     mono, left and right channels."""
     if kind == "fused6":
         es = [_common_logp(m + s) for m in ("mms", "lv60k") for s in ("", "_vocL", "_vocR")]

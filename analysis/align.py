@@ -1,17 +1,30 @@
-"""Word-level lyric alignment -> data/lyrics.json
+"""Word-level lyric alignment -> songs/<song>/data/lyrics.json
 
-Pipeline
-  1. ctc_emissions.py  : frame-wise CTC log-probs of the (time-corrected) vocal
+Pipeline (pipeline.py runs the steps in order)
+  1. stems.py          : gapless decode + Demucs stems.
+  2. vocal_feats.py    : vocal-stem RMS / pitch / onset features (5 ms hop).
+  3. ctc_emissions.py  : frame-wise CTC log-probs of the (time-corrected) vocal
                          stem from two acoustic models (MMS_FA, wav2vec2 LV60K).
-  2. whisper_run.py    : mlx-whisper large-v3-turbo word timestamps (cross-check).
-  3. vocal_feats.py    : vocal-stem RMS / pitch / onset features (5 ms hop).
-  4. this script       : one global constrained CTC Viterbi pass over the whole
+  4. whisper_run.py    : mlx-whisper large-v3-turbo word timestamps (cross-check).
+  5. this script       : one global constrained CTC Viterbi pass over the whole
                          song on the fused emissions (garbage "star" token
                          between lines), with manually verified anchors for hard
                          spots, then signal-based refinement of word starts/ends,
                          confidence scoring, QA plots.
 
-Run:  uv run python align.py [--plots]
+Per-song corrections live in song.json "align" (line / word indices are 0-based,
+as in the QA plot titles and the printed summary):
+  fix          : [{"line", "word", "start"?, "end"?, "syl"?: [starts of the 2nd.. sub-words], "conf"?, "note"?}]
+                 final manual word boundaries, only where the plots clearly show
+                 the automatic result is wrong.
+  anchors      : [{"line", "word", "sub"?: 0, "lo"?, "hi"?}] time window (s) that
+                 constrains a sub-word on the CTC path.
+  line_windows : [{"line", "lo", "hi"}] every word of the line must lie inside.
+  extras       : [{"start", "end", "desc"}] descriptions of unlisted vocals
+                 (ad-libs, backing pads) for lyrics.json "extras".
+  notes        : free text appended to lyrics.json "notes".
+
+Run:  SONG=<slug> uv run python align.py [--plots]
 """
 import common
 import json
@@ -28,55 +41,23 @@ from pron import pron
 # mono sum, left and right channel (choruses are double-tracked L/R).
 PRIMARY = "fused6"
 # Independent-ish alternatives, used for agreement-based confidence.
-ALTS = ("mms", "lv60k", "fused_vocL", "fused_vocR", "fused_lead")
+ALTS = ("mms", "lv60k", "fused_vocL", "fused_vocR")
+
+_ALIGN = common.CONFIG.get("align", {})
 
 # Per-line time windows (seconds) where the automatic path is ambiguous.
-LINE_WINDOWS = {}
+LINE_WINDOWS = {x["line"]: (x["lo"], x["hi"]) for x in _ALIGN.get("line_windows", [])}
 
-# ---------------------------------------------------------------------------
 # Manual anchors (seconds) for the CTC path, established by inspecting the QA
 # plots (spectrogram / pitch / envelopes).  Key: (line, token, subword) ->
 # (earliest allowed start, latest allowed end) of that subword's chars.
-ANCHORS = {}
+ANCHORS = {(x["line"], x["word"], x.get("sub", 0)): (x.get("lo"), x.get("hi"))
+           for x in _ALIGN.get("anchors", [])}
 
-# Final manual corrections of word boundaries after refinement, only where the
-# plots clearly show the automatic result is wrong.  (line, token) ->
-# dict(start=..., end=...)
-FIX = {
-    # L5 "don't eat me alive": long legato vowels, CTC places eat/alive late /
-    # early.  /i:/ of "eat" starts right after the t-release at 20.26; "alive"
-    # starts with the pitch drop to the schwa at 21.35 ("-live" at 21.85).
-    (5, 3): dict(start=20.27),
-    (5, 5): dict(start=21.35),
-    # L11 "shinigami eyes": shi-ni-ga-mi then /a/ of "eyes" at 34.73
-    (11, 3): dict(start=34.73),
-    # L40 final chorus "I'm upping my P(doom)": lead is buried under a
-    # sustained backing "ah" pad (122.8-125.8); CTC finds nothing.  Placed from
-    # the median-filtered spectrogram + karaoke-lead stem ("doom" /d/ at
-    # 125.66 seen by both CTC models on the lead stem), rhythm identical to
-    # chorus 3 (95.46 / 95.70 / 96.10 / 96.32).
-    (40, 3): dict(start=125.40, syl=[125.66], conf=0.45),
-    (40, 0): dict(start=124.52, conf=0.35),
-    (40, 1): dict(start=124.78, conf=0.35),
-    (40, 2): dict(start=125.20, conf=0.4),
-    # Chorus pickups "I'm": strong vocal onset 2.5 beats before the DOOM
-    # downbeat in every chorus (the CTC path smears "I'm" over backing vocals).
-    (6, 0): dict(start=22.76, conf=0.7),
-    (17, 0): dict(start=59.13, conf=0.7),
-    (17, 1): dict(start=59.36),
-    (28, 0): dict(start=95.47, conf=0.75),
-    # "lies," voiced /l/ onset (lv60k / L / R channels agree, onset peak 31.16)
-    (10, 4): dict(start=31.14, conf=0.7),
-    # "We" / "don't": rest-onset rule fired on reverb tail / breath noise.
-    (12, 0): dict(start=38.62),
-    (27, 2): dict(start=92.46),
-    # "you are" is one long note; vowel change /u/ -> /a/ (spectral centroid
-    # 1020 -> 1180 Hz) at 83.93.  CTC models disagree (83.94 mms / 84.58 lv).
-    (25, 6): dict(start=83.93, conf=0.5),
-    # held notes whose automatic end ran into the next (unlisted) vocal
-    (33, 2): dict(end=108.45),
-    (45, 4): dict(end=140.55),
-}
+# Final manual corrections of word boundaries after refinement.
+# (line, token) -> dict(start=..., end=..., syl=[...], conf=...)
+FIX = {(x["line"], x["word"]): {k: x[k] for k in ("start", "end", "syl", "conf") if k in x}
+       for x in _ALIGN.get("fix", [])}
 
 # ---------------------------------------------------------------------------
 
@@ -103,6 +84,7 @@ def runs(mask):
     return list(zip(np.where(d == 1)[0], np.where(d == -1)[0]))
 
 
+REST_ONSET_MAX = 1.0  # s: furthest a start moves back to the voice re-entry after a rest
 FRIC_START = re.compile(r"(s|sh|ch|z|f|th|j|c[eiy]|x|h)")
 VOICED_TH = {"the", "there", "there's", "that", "that's", "they", "this", "then"}
 FRIC_END = re.compile(r"(s|z|f|x|ce|se|ze|sh|ch)$")
@@ -160,9 +142,12 @@ def refine(words, f, fix=None):
             rs = [(a, b) for a, b in runs(sil[i0:i1]) if (b - a) * hop >= 0.05]
             if rs:
                 onset = (i0 + rs[-1][1]) * hop
-                if s - onset > 0.04:
-                    u["s"], u["rule"] = onset, "rest-onset"
-                done = True
+                # an unlisted vocal (ad-lib, tag) before the word keeps the voice going: the
+                # re-entry is then seconds early, not a late CTC start
+                if s - onset <= REST_ONSET_MAX:
+                    if s - onset > 0.04:
+                        u["s"], u["rule"] = onset, "rest-onset"
+                    done = True
         # 2. onset snap
         if not done:
             vowel_init = u["text"][0] in "aeiou"
@@ -240,14 +225,9 @@ def refine(words, f, fix=None):
     return words
 
 
-EXTRA_DESC = [
-    # (t0, t1, description) -- identified from QA plots, the karaoke lead stem
-    # and Whisper / greedy CTC transcripts of the vocal stem.
-    (34.9, 38.3, "backing-vocal tail / 'ah' ad-lib after 'eyes' over the break (chorus 1 end)"),
-    (108.5, 110.15, "lead-in before 'Just transformers': Whisper hears a stuttered 'Just, just, just' (low confidence)"),
-    (122.4, 125.9, "sustained backing 'ah' pad under 'I'm upping my P(doom)' (final chorus) - lead is buried here"),
-    (140.6, 153.5, "outro chant: repeated 'oh' / 'oh-oh' vocal hook (Whisper: 'Oh, oh, oh...') until the drums stop at ~153"),
-]
+# (t0, t1, description) of vocals that are not in the lyric text, identified
+# from the QA plots and the Whisper transcript.
+EXTRA_DESC = [(x["start"], x["end"], x["desc"]) for x in _ALIGN.get("extras", [])]
 
 
 def detect_extras(words, f):
@@ -286,7 +266,7 @@ def median_filter_1d(x, n):
 
 
 def whisper_words():
-    W = json.loads((common.WORK / "whisper_turbo_prompt.json").read_text())
+    W = json.loads((common.WORK / "whisper.json").read_text())
     return [(w["word"].strip(), w["start"], w["end"]) for s in W["segments"] for w in s.get("words", [])]
 
 
@@ -320,7 +300,7 @@ def map_whisper(words, ww):
 
 def confidence(words, alt):
     for i, w in enumerate(words):
-        ds = [abs(a[i]["start"] - w["ctc_start"]) for k, a in alt.items() if k != "fused_lead"]
+        ds = [abs(a[i]["start"] - w["ctc_start"]) for a in alt.values()]
         agree = np.mean([d <= 0.06 for d in ds])
         p = min(1.0, w["conf"] / 0.5)
         wh = w.get("whisper")
@@ -334,8 +314,8 @@ def confidence(words, alt):
 
 
 def main(plots=False):
-    L = common.load_lyrics_src()
-    toks = [t.split(" ") for _, _, t in L]
+    L = common.load_lyrics()
+    toks = [ln["text"].split(" ") for ln in L]
     E = emissions(PRIMARY)
     sp, score, _, _ = align(E, toks, anchors=ANCHORS, line_windows=LINE_WINDOWS)
     words = word_table(sp, toks)
@@ -356,7 +336,8 @@ def main(plots=False):
     (common.WORK / "align_debug.json").write_text(json.dumps(dict(words=words, alt=alt), indent=1, default=float))
 
     lines = []
-    for li, (s0, e0, text) in enumerate(L):
+    for li, ln in enumerate(L):
+        text = ln["text"]
         ws = [w for w in words if w["li"] == li]
         assert [w["w"] for w in ws] == text.split(" ")
         out = []
@@ -365,19 +346,37 @@ def main(plots=False):
             if len(w["subs"]) > 1:
                 d["syl"] = [[round(a, 3), round(b, 3)] for a, b in w["subs"]]
             out.append(d)
-        lines.append(dict(i=li, text=text, start=out[0]["start"], end=out[-1]["end"], words=out))
-    doc = dict(lines=lines, extras=detect_extras(words, f), notes=NOTES)
+        lines.append(dict(i=li, text=text, section=ln["section"], part=ln["part"],
+                          start=out[0]["start"], end=out[-1]["end"], words=out))
+    notes = NOTES + (" " + _ALIGN["notes"] if _ALIGN.get("notes") else "")
+    doc = dict(lines=lines, extras=detect_extras(words, f), notes=notes)
     (common.DATA / "lyrics.json").write_text(json.dumps(doc, indent=2, ensure_ascii=False))
     print("wrote", common.DATA / "lyrics.json", "score", score)
+    report(lines, words)
     if plots:
         make_plots(words, alt, L)
     return words, alt
 
 
+def report(lines, words):
+    """QA summary: per line, how many words Whisper heard at the aligned place
+    (a line Whisper doesn't hear at all was probably not sung as written), and
+    the low-confidence words to check on the plots."""
+    print("\nline  start  whisper  low-confidence words      text")
+    for ln in lines:
+        ws = [w for w in words if w["li"] == ln["i"]]
+        heard = sum(w.get("whisper") is not None for w in ws) / len(ws)
+        low = [f"{k}:{w['w']}({w['conf_final']:.2f})" for k, w in enumerate(ws) if w["conf_final"] < 0.6]
+        flag = "!" if heard < 0.5 else " "
+        print(f"{ln['i']:>3}{flag} {ln['start']:6.2f}  {heard:6.0%}   {' '.join(low):<24} {ln['text']}")
+    print("(!: Whisper heard under half the line; check that lyrics.txt matches what is sung)")
+
+
 def make_plots(words, alt, L):
     from qa_plot import plot
     ww = whisper_words()
-    for li, (s0, e0, text) in enumerate(L):
+    for li, ln in enumerate(L):
+        text = ln["text"]
         ws = [w for w in words if w["li"] == li]
         t0 = min(ws[0]["start"], ws[0]["ctc_start"]) - 0.8
         t1 = max(ws[-1]["end"], ws[-1]["ctc_end"]) + 0.6
@@ -395,35 +394,20 @@ def make_plots(words, alt, L):
 
 
 NOTES = (
-    "Timeline = gapless mp3 decode (same as data/audio.json); Demucs stems shifted -23 ms "
-    "(LAME encoder delay). Method: (1) CTC emissions (20 ms frames) of the Demucs vocal stem "
-    "from two acoustic models, torchaudio MMS_FA and wav2vec2-large-lv60k-960h, each on the "
-    "mono sum and on the left and right channels (choruses are double-tracked L/R), fused as a "
-    "probability mixture; (2) one global constrained Viterbi forced alignment of all 46 lines "
-    "over the whole song with a garbage 'star' token between lines to absorb ad-libs; "
-    "acronyms/odd words aligned with phonetic spellings (AGI='ay gee i', P(doom)='pee doom', "
-    "ChatGPT='chat gee pee tee', NVDA='en vee dee ay', MLP='em el pee', CDR='see dee are', "
-    "PTO='pee tee oh', GPU='gee pee you', RLHF='are el aitch eff', One E thirty='one ee thirty', "
-    "Neumann's='noymans'); (3) signal refinement per syllable unit on the vocal stem: start moved "
-    "to the voice re-entry after a rest, snapped to the nearest spectral-flux onset, or moved back "
-    "to the start of s/sh/ch/f/th frication; ends = next word start when legato, else when the "
-    "voice drops 15 dB below the word level (held notes keep their full length); (4) "
-    "cross-check against mlx-whisper large-v3-turbo word timestamps and the individual "
-    "models/channels, plus a mel-roformer karaoke lead-vocal stem for the final chorus; "
-    "(5) manual verification of every line on zoomed spectrogram/pitch/onset plots "
-    "(analysis/qa/zl_*.png) with ~20 manual corrections (align.py FIX). "
-    "conf: 0.35 + agreement of the independent alignments (<=60 ms) + CTC posterior + "
-    "Whisper agreement; manual fixes carry their own conf. 'syl' = start/end of each spelled "
-    "letter or compound part (AGI, ChatGPT, P(doom), NVDA, MLP, CDR, PTO, GPU, RLHF, "
-    "Killswitch, Post-Chinchilla, super-dense, pre-training, self-upgrade). "
-    "NVDA pronunciation is ambiguous: 'Nvidia' scores slightly better acoustically than "
-    "'en-vee-dee-ay', but the word timing is the same either way (62.54-63.36), so syl uses "
-    "the letter split. "
-    "Uncertain words: final-chorus 'I'm upping my' (124.5-125.4, buried under a backing pad, "
-    "placed by rhythm of the other choruses, +-100 ms); 'are' (83.93, could be 84.58); "
-    "'me' (57.14); 'alive' (21.35); 'eat' (20.27); 'Just transformers' region (108.5-110.2 lead-in); "
-    "chorus 'I'm' pickups (22.76, 59.13, 95.47) +-50 ms; 'lies,' 31.14. Everything else "
-    "is expected within ~30-50 ms at word starts."
+    "Timeline = gapless mp3 decode (same as data/audio.json); Demucs stems shifted to match "
+    "(analysis/stems.py measures the lag). Method: (1) CTC emissions (20 ms frames) of the Demucs "
+    "vocal stem from two acoustic models, torchaudio MMS_FA and wav2vec2-large-lv60k-960h, each on "
+    "the mono sum and on the left and right channels, fused as a probability mixture; (2) one global "
+    "constrained Viterbi forced alignment of all lines over the whole song with a garbage 'star' token "
+    "between lines to absorb ad-libs; acronyms and odd words aligned with the phonetic spellings in "
+    "song.json 'pron'; (3) signal refinement per syllable unit on the vocal stem: start moved to the "
+    "voice re-entry after a rest, snapped to the nearest spectral-flux onset, or moved back to the start "
+    "of s/sh/ch/f/th frication; ends = next word start when legato, else when the voice drops 15 dB "
+    "below the word level; (4) cross-check against mlx-whisper large-v3-turbo word timestamps and the "
+    "individual models/channels; (5) manual corrections from song.json 'align'. "
+    "conf: 0.35 + agreement of the independent alignments (<=60 ms) + CTC posterior + Whisper "
+    "agreement; manual fixes carry their own conf. 'syl' = start/end of each sub-word of a word "
+    "spelled as several (acronyms, hyphenated compounds)."
 )
 
 if __name__ == "__main__":

@@ -1,0 +1,2285 @@
+{
+  "lines": [
+    {
+      "i": 0,
+      "text": "Gryffy kicks the door with a bow tie loose",
+      "section": "Verse 1",
+      "part": "verse1",
+      "start": 2.634,
+      "end": 5.48,
+      "words": [
+        {
+          "w": "Gryffy",
+          "start": 2.634,
+          "end": 3.078,
+          "conf": 1.0
+        },
+        {
+          "w": "kicks",
+          "start": 3.2,
+          "end": 3.707,
+          "conf": 1.0
+        },
+        {
+          "w": "the",
+          "start": 3.707,
+          "end": 3.88,
+          "conf": 0.85
+        },
+        {
+          "w": "door",
+          "start": 3.88,
+          "end": 4.34,
+          "conf": 1.0
+        },
+        {
+          "w": "with",
+          "start": 4.34,
+          "end": 4.5,
+          "conf": 0.84
+        },
+        {
+          "w": "a",
+          "start": 4.5,
+          "end": 4.58,
+          "conf": 0.92
+        },
+        {
+          "w": "bow",
+          "start": 4.58,
+          "end": 4.824,
+          "conf": 1.0
+        },
+        {
+          "w": "tie",
+          "start": 4.824,
+          "end": 5.04,
+          "conf": 0.91
+        },
+        {
+          "w": "loose",
+          "start": 5.04,
+          "end": 5.48,
+          "conf": 0.95
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "text": "Tiny tux, big attitude, nothing to lose",
+      "section": "Verse 1",
+      "part": "verse1",
+      "start": 5.48,
+      "end": 9.014,
+      "words": [
+        {
+          "w": "Tiny",
+          "start": 5.48,
+          "end": 5.797,
+          "conf": 1.0
+        },
+        {
+          "w": "tux,",
+          "start": 5.797,
+          "end": 6.331,
+          "conf": 0.99
+        },
+        {
+          "w": "big",
+          "start": 6.331,
+          "end": 6.795,
+          "conf": 1.0
+        },
+        {
+          "w": "attitude,",
+          "start": 6.874,
+          "end": 7.6,
+          "conf": 0.68
+        },
+        {
+          "w": "nothing",
+          "start": 7.6,
+          "end": 8.26,
+          "conf": 0.98
+        },
+        {
+          "w": "to",
+          "start": 8.26,
+          "end": 8.5,
+          "conf": 0.81
+        },
+        {
+          "w": "lose",
+          "start": 8.5,
+          "end": 9.014,
+          "conf": 0.98
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "text": "One snort and the whole room’s looking his way",
+      "section": "Verse 1",
+      "part": "verse1",
+      "start": 9.014,
+      "end": 12.6,
+      "words": [
+        {
+          "w": "One",
+          "start": 9.014,
+          "end": 9.618,
+          "conf": 0.78
+        },
+        {
+          "w": "snort",
+          "start": 9.902,
+          "end": 10.361,
+          "conf": 0.85
+        },
+        {
+          "w": "and",
+          "start": 10.361,
+          "end": 10.44,
+          "conf": 0.96
+        },
+        {
+          "w": "the",
+          "start": 10.44,
+          "end": 10.56,
+          "conf": 0.98
+        },
+        {
+          "w": "whole",
+          "start": 10.56,
+          "end": 11.0,
+          "conf": 0.94
+        },
+        {
+          "w": "room’s",
+          "start": 11.0,
+          "end": 11.44,
+          "conf": 0.92
+        },
+        {
+          "w": "looking",
+          "start": 11.44,
+          "end": 11.803,
+          "conf": 0.96
+        },
+        {
+          "w": "his",
+          "start": 11.803,
+          "end": 12.097,
+          "conf": 1.0
+        },
+        {
+          "w": "way",
+          "start": 12.097,
+          "end": 12.6,
+          "conf": 1.0
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "text": "Then that green ball rolls—he’s gone, no delay",
+      "section": "Verse 1",
+      "part": "verse1",
+      "start": 12.6,
+      "end": 16.26,
+      "words": [
+        {
+          "w": "Then",
+          "start": 12.6,
+          "end": 12.86,
+          "conf": 0.91
+        },
+        {
+          "w": "that",
+          "start": 12.86,
+          "end": 13.04,
+          "conf": 0.88
+        },
+        {
+          "w": "green",
+          "start": 13.04,
+          "end": 13.52,
+          "conf": 1.0
+        },
+        {
+          "w": "ball",
+          "start": 13.52,
+          "end": 13.96,
+          "conf": 0.75
+        },
+        {
+          "w": "rolls—he’s",
+          "start": 13.96,
+          "end": 14.66,
+          "conf": 0.92,
+          "syl": [
+            [
+              13.96,
+              14.437
+            ],
+            [
+              14.437,
+              14.66
+            ]
+          ]
+        },
+        {
+          "w": "gone,",
+          "start": 14.66,
+          "end": 15.12,
+          "conf": 0.99
+        },
+        {
+          "w": "no",
+          "start": 15.12,
+          "end": 15.46,
+          "conf": 0.96
+        },
+        {
+          "w": "delay",
+          "start": 15.46,
+          "end": 16.26,
+          "conf": 0.94
+        }
+      ]
+    },
+    {
+      "i": 4,
+      "text": "You crouch down low, I know that grin",
+      "section": "Pre-Chorus",
+      "part": "prechorus1",
+      "start": 16.26,
+      "end": 19.9,
+      "words": [
+        {
+          "w": "You",
+          "start": 16.26,
+          "end": 16.46,
+          "conf": 1.0
+        },
+        {
+          "w": "crouch",
+          "start": 16.46,
+          "end": 16.74,
+          "conf": 0.98
+        },
+        {
+          "w": "down",
+          "start": 16.74,
+          "end": 17.46,
+          "conf": 1.0
+        },
+        {
+          "w": "low,",
+          "start": 17.46,
+          "end": 18.134,
+          "conf": 0.55
+        },
+        {
+          "w": "I",
+          "start": 18.134,
+          "end": 18.3,
+          "conf": 0.62
+        },
+        {
+          "w": "know",
+          "start": 18.3,
+          "end": 18.56,
+          "conf": 0.82
+        },
+        {
+          "w": "that",
+          "start": 18.56,
+          "end": 18.78,
+          "conf": 0.92
+        },
+        {
+          "w": "grin",
+          "start": 18.78,
+          "end": 19.9,
+          "conf": 0.98
+        }
+      ]
+    },
+    {
+      "i": 5,
+      "text": "Tail up, paws set—let the trouble begin",
+      "section": "Pre-Chorus",
+      "part": "prechorus1",
+      "start": 19.9,
+      "end": 23.44,
+      "words": [
+        {
+          "w": "Tail",
+          "start": 19.9,
+          "end": 20.24,
+          "conf": 0.58
+        },
+        {
+          "w": "up,",
+          "start": 20.24,
+          "end": 20.36,
+          "conf": 0.83
+        },
+        {
+          "w": "paws",
+          "start": 20.36,
+          "end": 20.558,
+          "conf": 0.85
+        },
+        {
+          "w": "set—let",
+          "start": 20.558,
+          "end": 21.217,
+          "conf": 0.86,
+          "syl": [
+            [
+              20.558,
+              20.967
+            ],
+            [
+              20.967,
+              21.217
+            ]
+          ]
+        },
+        {
+          "w": "the",
+          "start": 21.3,
+          "end": 21.46,
+          "conf": 1.0
+        },
+        {
+          "w": "trouble",
+          "start": 21.46,
+          "end": 22.0,
+          "conf": 1.0
+        },
+        {
+          "w": "begin",
+          "start": 22.0,
+          "end": 23.44,
+          "conf": 0.84
+        }
+      ]
+    },
+    {
+      "i": 6,
+      "text": "Dance, Gryffy, tear up the floor",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 23.44,
+      "end": 26.55,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 23.44,
+          "end": 24.7,
+          "conf": 0.54
+        },
+        {
+          "w": "Gryffy,",
+          "start": 24.7,
+          "end": 25.14,
+          "conf": 0.91
+        },
+        {
+          "w": "tear",
+          "start": 25.14,
+          "end": 25.5,
+          "conf": 0.87
+        },
+        {
+          "w": "up",
+          "start": 25.5,
+          "end": 25.62,
+          "conf": 0.68
+        },
+        {
+          "w": "the",
+          "start": 25.62,
+          "end": 25.717,
+          "conf": 0.96
+        },
+        {
+          "w": "floor",
+          "start": 25.717,
+          "end": 26.55,
+          "conf": 0.93
+        }
+      ]
+    },
+    {
+      "i": 7,
+      "text": "Little black-and-white blur going back for more",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 26.74,
+      "end": 30.406,
+      "words": [
+        {
+          "w": "Little",
+          "start": 26.74,
+          "end": 27.0,
+          "conf": 0.85
+        },
+        {
+          "w": "black-and-white",
+          "start": 27.0,
+          "end": 27.9,
+          "conf": 0.81,
+          "syl": [
+            [
+              27.0,
+              27.28
+            ],
+            [
+              27.28,
+              27.46
+            ],
+            [
+              27.46,
+              27.9
+            ]
+          ]
+        },
+        {
+          "w": "blur",
+          "start": 27.9,
+          "end": 28.36,
+          "conf": 0.87
+        },
+        {
+          "w": "going",
+          "start": 28.36,
+          "end": 28.8,
+          "conf": 0.95
+        },
+        {
+          "w": "back",
+          "start": 28.8,
+          "end": 29.059,
+          "conf": 0.82
+        },
+        {
+          "w": "for",
+          "start": 29.059,
+          "end": 29.48,
+          "conf": 0.94
+        },
+        {
+          "w": "more",
+          "start": 29.48,
+          "end": 30.406,
+          "conf": 0.82
+        }
+      ]
+    },
+    {
+      "i": 8,
+      "text": "Snort, spin, bring it right back around",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 30.406,
+      "end": 34.043,
+      "words": [
+        {
+          "w": "Snort,",
+          "start": 30.406,
+          "end": 30.91,
+          "conf": 0.82
+        },
+        {
+          "w": "spin,",
+          "start": 30.91,
+          "end": 31.54,
+          "conf": 0.81
+        },
+        {
+          "w": "bring",
+          "start": 31.54,
+          "end": 31.76,
+          "conf": 0.86
+        },
+        {
+          "w": "it",
+          "start": 31.76,
+          "end": 32.0,
+          "conf": 0.82
+        },
+        {
+          "w": "right",
+          "start": 32.0,
+          "end": 32.44,
+          "conf": 0.9
+        },
+        {
+          "w": "back",
+          "start": 32.44,
+          "end": 32.815,
+          "conf": 0.8
+        },
+        {
+          "w": "around",
+          "start": 32.815,
+          "end": 34.043,
+          "conf": 0.83
+        }
+      ]
+    },
+    {
+      "i": 9,
+      "text": "My Frenchton king, you own this town",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 34.043,
+      "end": 39.765,
+      "words": [
+        {
+          "w": "My",
+          "start": 34.043,
+          "end": 34.147,
+          "conf": 0.85
+        },
+        {
+          "w": "Frenchton",
+          "start": 34.147,
+          "end": 35.14,
+          "conf": 0.92
+        },
+        {
+          "w": "king,",
+          "start": 35.14,
+          "end": 35.62,
+          "conf": 0.85
+        },
+        {
+          "w": "you",
+          "start": 35.62,
+          "end": 35.898,
+          "conf": 0.98
+        },
+        {
+          "w": "own",
+          "start": 35.898,
+          "end": 36.32,
+          "conf": 0.69
+        },
+        {
+          "w": "this",
+          "start": 36.32,
+          "end": 36.72,
+          "conf": 0.88
+        },
+        {
+          "w": "town",
+          "start": 36.72,
+          "end": 39.765,
+          "conf": 0.92
+        }
+      ]
+    },
+    {
+      "i": 10,
+      "text": "Dance, Gryffy, run wild, run free",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 39.765,
+      "end": 44.24,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 39.765,
+          "end": 40.6,
+          "conf": 0.75
+        },
+        {
+          "w": "Gryffy,",
+          "start": 40.6,
+          "end": 41.536,
+          "conf": 0.66
+        },
+        {
+          "w": "run",
+          "start": 41.74,
+          "end": 42.16,
+          "conf": 0.85
+        },
+        {
+          "w": "wild,",
+          "start": 42.16,
+          "end": 43.58,
+          "conf": 0.68
+        },
+        {
+          "w": "run",
+          "start": 43.58,
+          "end": 43.935,
+          "conf": 0.78
+        },
+        {
+          "w": "free",
+          "start": 43.935,
+          "end": 44.24,
+          "conf": 0.69
+        }
+      ]
+    },
+    {
+      "i": 11,
+      "text": "That bright green ball’s your VIP",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 44.24,
+      "end": 46.98,
+      "words": [
+        {
+          "w": "That",
+          "start": 44.24,
+          "end": 44.34,
+          "conf": 0.66
+        },
+        {
+          "w": "bright",
+          "start": 44.34,
+          "end": 44.68,
+          "conf": 0.74
+        },
+        {
+          "w": "green",
+          "start": 44.68,
+          "end": 45.16,
+          "conf": 0.91
+        },
+        {
+          "w": "ball’s",
+          "start": 45.16,
+          "end": 45.4,
+          "conf": 0.68
+        },
+        {
+          "w": "your",
+          "start": 45.4,
+          "end": 45.62,
+          "conf": 0.76
+        },
+        {
+          "w": "VIP",
+          "start": 45.62,
+          "end": 46.98,
+          "conf": 0.76,
+          "syl": [
+            [
+              45.62,
+              45.78
+            ],
+            [
+              45.78,
+              46.02
+            ],
+            [
+              46.02,
+              46.98
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "i": 12,
+      "text": "Dance, Gryffy, run wild, run free",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 46.98,
+      "end": 51.298,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 46.98,
+          "end": 47.86,
+          "conf": 0.59
+        },
+        {
+          "w": "Gryffy,",
+          "start": 47.86,
+          "end": 48.794,
+          "conf": 0.58
+        },
+        {
+          "w": "run",
+          "start": 49.02,
+          "end": 49.4,
+          "conf": 0.87
+        },
+        {
+          "w": "wild,",
+          "start": 49.4,
+          "end": 50.555,
+          "conf": 0.6
+        },
+        {
+          "w": "run",
+          "start": 50.705,
+          "end": 50.999,
+          "conf": 0.74
+        },
+        {
+          "w": "free",
+          "start": 50.999,
+          "end": 51.298,
+          "conf": 0.75
+        }
+      ]
+    },
+    {
+      "i": 13,
+      "text": "That bright green ball’s your VIP",
+      "section": "Chorus",
+      "part": "chorus1",
+      "start": 51.298,
+      "end": 53.773,
+      "words": [
+        {
+          "w": "That",
+          "start": 51.298,
+          "end": 51.48,
+          "conf": 0.66
+        },
+        {
+          "w": "bright",
+          "start": 51.48,
+          "end": 51.94,
+          "conf": 0.89
+        },
+        {
+          "w": "green",
+          "start": 51.94,
+          "end": 52.38,
+          "conf": 0.81
+        },
+        {
+          "w": "ball’s",
+          "start": 52.38,
+          "end": 52.64,
+          "conf": 0.71
+        },
+        {
+          "w": "your",
+          "start": 52.64,
+          "end": 52.8,
+          "conf": 0.76
+        },
+        {
+          "w": "VIP",
+          "start": 52.8,
+          "end": 53.773,
+          "conf": 0.68,
+          "syl": [
+            [
+              52.8,
+              52.92
+            ],
+            [
+              52.92,
+              53.28
+            ],
+            [
+              53.28,
+              53.773
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "i": 14,
+      "text": "Button nose and a crooked little smile",
+      "section": "Verse 2",
+      "part": "verse2",
+      "start": 59.66,
+      "end": 63.805,
+      "words": [
+        {
+          "w": "Button",
+          "start": 59.66,
+          "end": 61.38,
+          "conf": 0.7
+        },
+        {
+          "w": "nose",
+          "start": 61.38,
+          "end": 61.78,
+          "conf": 0.8
+        },
+        {
+          "w": "and",
+          "start": 61.78,
+          "end": 62.2,
+          "conf": 0.86
+        },
+        {
+          "w": "a",
+          "start": 62.2,
+          "end": 62.34,
+          "conf": 0.68
+        },
+        {
+          "w": "crooked",
+          "start": 62.34,
+          "end": 62.762,
+          "conf": 0.89
+        },
+        {
+          "w": "little",
+          "start": 62.762,
+          "end": 63.132,
+          "conf": 0.86
+        },
+        {
+          "w": "smile",
+          "start": 63.132,
+          "end": 63.805,
+          "conf": 0.99
+        }
+      ]
+    },
+    {
+      "i": 15,
+      "text": "Skids past the sofa like a champion mile",
+      "section": "Verse 2",
+      "part": "verse2",
+      "start": 63.805,
+      "end": 67.8,
+      "words": [
+        {
+          "w": "Skids",
+          "start": 63.805,
+          "end": 64.334,
+          "conf": 0.99
+        },
+        {
+          "w": "past",
+          "start": 64.4,
+          "end": 64.86,
+          "conf": 0.94
+        },
+        {
+          "w": "the",
+          "start": 64.86,
+          "end": 64.957,
+          "conf": 0.76
+        },
+        {
+          "w": "sofa",
+          "start": 64.957,
+          "end": 65.361,
+          "conf": 0.93
+        },
+        {
+          "w": "like",
+          "start": 65.361,
+          "end": 65.8,
+          "conf": 0.66
+        },
+        {
+          "w": "a",
+          "start": 65.8,
+          "end": 65.9,
+          "conf": 0.76
+        },
+        {
+          "w": "champion",
+          "start": 65.9,
+          "end": 66.76,
+          "conf": 0.89
+        },
+        {
+          "w": "mile",
+          "start": 66.76,
+          "end": 67.8,
+          "conf": 0.46
+        }
+      ]
+    },
+    {
+      "i": 16,
+      "text": "Bow tie sideways, ears standing tall",
+      "section": "Verse 2",
+      "part": "verse2",
+      "start": 67.8,
+      "end": 70.704,
+      "words": [
+        {
+          "w": "Bow",
+          "start": 67.8,
+          "end": 68.14,
+          "conf": 0.68
+        },
+        {
+          "w": "tie",
+          "start": 68.14,
+          "end": 68.589,
+          "conf": 0.9
+        },
+        {
+          "w": "sideways,",
+          "start": 68.589,
+          "end": 69.432,
+          "conf": 0.98
+        },
+        {
+          "w": "ears",
+          "start": 69.432,
+          "end": 69.76,
+          "conf": 0.79
+        },
+        {
+          "w": "standing",
+          "start": 69.76,
+          "end": 70.26,
+          "conf": 0.97
+        },
+        {
+          "w": "tall",
+          "start": 70.26,
+          "end": 70.704,
+          "conf": 0.86
+        }
+      ]
+    },
+    {
+      "i": 17,
+      "text": "He claims the rug like he owns it all",
+      "section": "Verse 2",
+      "part": "verse2",
+      "start": 70.704,
+      "end": 74.38,
+      "words": [
+        {
+          "w": "He",
+          "start": 70.704,
+          "end": 70.92,
+          "conf": 0.84
+        },
+        {
+          "w": "claims",
+          "start": 70.92,
+          "end": 71.22,
+          "conf": 0.91
+        },
+        {
+          "w": "the",
+          "start": 71.22,
+          "end": 71.42,
+          "conf": 0.86
+        },
+        {
+          "w": "rug",
+          "start": 71.42,
+          "end": 72.56,
+          "conf": 0.92
+        },
+        {
+          "w": "like",
+          "start": 72.56,
+          "end": 72.76,
+          "conf": 0.8
+        },
+        {
+          "w": "he",
+          "start": 72.76,
+          "end": 73.029,
+          "conf": 0.81
+        },
+        {
+          "w": "owns",
+          "start": 73.029,
+          "end": 73.82,
+          "conf": 0.74
+        },
+        {
+          "w": "it",
+          "start": 73.82,
+          "end": 74.24,
+          "conf": 0.7
+        },
+        {
+          "w": "all",
+          "start": 74.24,
+          "end": 74.38,
+          "conf": 0.56
+        }
+      ]
+    },
+    {
+      "i": 18,
+      "text": "You crouch down low, I know that grin",
+      "section": "Pre-Chorus",
+      "part": "prechorus2",
+      "start": 74.38,
+      "end": 77.329,
+      "words": [
+        {
+          "w": "You",
+          "start": 74.38,
+          "end": 74.52,
+          "conf": 0.88
+        },
+        {
+          "w": "crouch",
+          "start": 74.52,
+          "end": 74.8,
+          "conf": 0.85
+        },
+        {
+          "w": "down",
+          "start": 74.8,
+          "end": 75.538,
+          "conf": 0.87
+        },
+        {
+          "w": "low,",
+          "start": 75.538,
+          "end": 76.207,
+          "conf": 0.54
+        },
+        {
+          "w": "I",
+          "start": 76.207,
+          "end": 76.38,
+          "conf": 0.71
+        },
+        {
+          "w": "know",
+          "start": 76.38,
+          "end": 76.62,
+          "conf": 0.85
+        },
+        {
+          "w": "that",
+          "start": 76.62,
+          "end": 76.82,
+          "conf": 0.94
+        },
+        {
+          "w": "grin",
+          "start": 76.82,
+          "end": 77.329,
+          "conf": 0.91
+        }
+      ]
+    },
+    {
+      "i": 19,
+      "text": "Tail up, paws set—let the trouble begin",
+      "section": "Pre-Chorus",
+      "part": "prechorus2",
+      "start": 77.329,
+      "end": 82.18,
+      "words": [
+        {
+          "w": "Tail",
+          "start": 77.329,
+          "end": 78.24,
+          "conf": 0.56
+        },
+        {
+          "w": "up,",
+          "start": 78.24,
+          "end": 78.44,
+          "conf": 0.83
+        },
+        {
+          "w": "paws",
+          "start": 78.44,
+          "end": 78.62,
+          "conf": 0.75
+        },
+        {
+          "w": "set—let",
+          "start": 78.62,
+          "end": 79.215,
+          "conf": 0.79,
+          "syl": [
+            [
+              78.62,
+              78.94
+            ],
+            [
+              78.94,
+              79.215
+            ]
+          ]
+        },
+        {
+          "w": "the",
+          "start": 79.32,
+          "end": 79.46,
+          "conf": 0.89
+        },
+        {
+          "w": "trouble",
+          "start": 79.46,
+          "end": 80.0,
+          "conf": 0.91
+        },
+        {
+          "w": "begin",
+          "start": 80.0,
+          "end": 82.18,
+          "conf": 0.9
+        }
+      ]
+    },
+    {
+      "i": 20,
+      "text": "Dance, Gryffy, tear up the floor",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 82.18,
+      "end": 84.333,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 82.18,
+          "end": 82.7,
+          "conf": 0.46
+        },
+        {
+          "w": "Gryffy,",
+          "start": 82.7,
+          "end": 83.12,
+          "conf": 0.82
+        },
+        {
+          "w": "tear",
+          "start": 83.12,
+          "end": 83.44,
+          "conf": 0.9
+        },
+        {
+          "w": "up",
+          "start": 83.44,
+          "end": 83.625,
+          "conf": 0.82
+        },
+        {
+          "w": "the",
+          "start": 83.625,
+          "end": 83.725,
+          "conf": 0.85
+        },
+        {
+          "w": "floor",
+          "start": 83.725,
+          "end": 84.333,
+          "conf": 0.9
+        }
+      ]
+    },
+    {
+      "i": 21,
+      "text": "Little black-and-white blur going back for more",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 84.72,
+      "end": 88.04,
+      "words": [
+        {
+          "w": "Little",
+          "start": 84.72,
+          "end": 84.96,
+          "conf": 0.7
+        },
+        {
+          "w": "black-and-white",
+          "start": 84.96,
+          "end": 85.84,
+          "conf": 0.8,
+          "syl": [
+            [
+              84.96,
+              85.211
+            ],
+            [
+              85.211,
+              85.4
+            ],
+            [
+              85.4,
+              85.84
+            ]
+          ]
+        },
+        {
+          "w": "blur",
+          "start": 85.84,
+          "end": 86.3,
+          "conf": 0.87
+        },
+        {
+          "w": "going",
+          "start": 86.3,
+          "end": 86.74,
+          "conf": 0.91
+        },
+        {
+          "w": "back",
+          "start": 86.74,
+          "end": 86.987,
+          "conf": 1.0
+        },
+        {
+          "w": "for",
+          "start": 86.987,
+          "end": 87.4,
+          "conf": 0.95
+        },
+        {
+          "w": "more",
+          "start": 87.4,
+          "end": 88.04,
+          "conf": 0.79
+        }
+      ]
+    },
+    {
+      "i": 22,
+      "text": "Snort, spin, bring it right back around",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 88.304,
+      "end": 91.622,
+      "words": [
+        {
+          "w": "Snort,",
+          "start": 88.304,
+          "end": 88.803,
+          "conf": 0.77
+        },
+        {
+          "w": "spin,",
+          "start": 88.803,
+          "end": 89.42,
+          "conf": 0.65
+        },
+        {
+          "w": "bring",
+          "start": 89.42,
+          "end": 89.72,
+          "conf": 0.77
+        },
+        {
+          "w": "it",
+          "start": 89.72,
+          "end": 89.88,
+          "conf": 0.84
+        },
+        {
+          "w": "right",
+          "start": 89.88,
+          "end": 90.205,
+          "conf": 0.78
+        },
+        {
+          "w": "back",
+          "start": 90.32,
+          "end": 90.694,
+          "conf": 0.8
+        },
+        {
+          "w": "around",
+          "start": 90.694,
+          "end": 91.622,
+          "conf": 0.88
+        }
+      ]
+    },
+    {
+      "i": 23,
+      "text": "My Frenchton king, you own this town",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 91.88,
+      "end": 96.58,
+      "words": [
+        {
+          "w": "My",
+          "start": 91.88,
+          "end": 92.001,
+          "conf": 0.84
+        },
+        {
+          "w": "Frenchton",
+          "start": 92.001,
+          "end": 92.98,
+          "conf": 0.91
+        },
+        {
+          "w": "king,",
+          "start": 92.98,
+          "end": 93.46,
+          "conf": 1.0
+        },
+        {
+          "w": "you",
+          "start": 93.46,
+          "end": 93.717,
+          "conf": 1.0
+        },
+        {
+          "w": "own",
+          "start": 93.717,
+          "end": 94.18,
+          "conf": 0.68
+        },
+        {
+          "w": "this",
+          "start": 94.18,
+          "end": 94.585,
+          "conf": 0.88
+        },
+        {
+          "w": "town",
+          "start": 94.585,
+          "end": 96.58,
+          "conf": 0.92
+        }
+      ]
+    },
+    {
+      "i": 24,
+      "text": "Dance, Gryffy, run wild, run free",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 96.58,
+      "end": 101.794,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 96.58,
+          "end": 98.4,
+          "conf": 0.62
+        },
+        {
+          "w": "Gryffy,",
+          "start": 98.4,
+          "end": 99.289,
+          "conf": 0.6
+        },
+        {
+          "w": "run",
+          "start": 99.52,
+          "end": 99.96,
+          "conf": 0.75
+        },
+        {
+          "w": "wild,",
+          "start": 99.96,
+          "end": 101.095,
+          "conf": 0.62
+        },
+        {
+          "w": "run",
+          "start": 101.32,
+          "end": 101.639,
+          "conf": 0.66
+        },
+        {
+          "w": "free",
+          "start": 101.639,
+          "end": 101.794,
+          "conf": 0.66
+        }
+      ]
+    },
+    {
+      "i": 25,
+      "text": "That bright green ball’s your VIP",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 101.794,
+      "end": 104.7,
+      "words": [
+        {
+          "w": "That",
+          "start": 101.794,
+          "end": 102.04,
+          "conf": 0.58
+        },
+        {
+          "w": "bright",
+          "start": 102.04,
+          "end": 102.332,
+          "conf": 0.82
+        },
+        {
+          "w": "green",
+          "start": 102.42,
+          "end": 102.88,
+          "conf": 0.87
+        },
+        {
+          "w": "ball’s",
+          "start": 102.88,
+          "end": 103.18,
+          "conf": 0.63
+        },
+        {
+          "w": "your",
+          "start": 103.18,
+          "end": 103.32,
+          "conf": 0.68
+        },
+        {
+          "w": "VIP",
+          "start": 103.32,
+          "end": 104.7,
+          "conf": 0.68,
+          "syl": [
+            [
+              103.32,
+              103.5
+            ],
+            [
+              103.5,
+              103.78
+            ],
+            [
+              103.78,
+              104.7
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "i": 26,
+      "text": "Dance, Gryffy, run wild, run free",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 104.7,
+      "end": 109.08,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 104.7,
+          "end": 105.54,
+          "conf": 0.62
+        },
+        {
+          "w": "Gryffy,",
+          "start": 105.54,
+          "end": 106.7,
+          "conf": 0.76
+        },
+        {
+          "w": "run",
+          "start": 106.7,
+          "end": 107.12,
+          "conf": 0.79
+        },
+        {
+          "w": "wild,",
+          "start": 107.12,
+          "end": 108.259,
+          "conf": 0.62
+        },
+        {
+          "w": "run",
+          "start": 108.5,
+          "end": 108.843,
+          "conf": 0.58
+        },
+        {
+          "w": "free",
+          "start": 108.843,
+          "end": 109.08,
+          "conf": 0.66
+        }
+      ]
+    },
+    {
+      "i": 27,
+      "text": "That bright green ball’s your VIP",
+      "section": "Chorus",
+      "part": "chorus2",
+      "start": 109.08,
+      "end": 110.94,
+      "words": [
+        {
+          "w": "That",
+          "start": 109.08,
+          "end": 109.16,
+          "conf": 0.66
+        },
+        {
+          "w": "bright",
+          "start": 109.16,
+          "end": 109.6,
+          "conf": 0.82
+        },
+        {
+          "w": "green",
+          "start": 109.6,
+          "end": 110.01,
+          "conf": 0.92
+        },
+        {
+          "w": "ball’s",
+          "start": 110.01,
+          "end": 110.344,
+          "conf": 0.7
+        },
+        {
+          "w": "your",
+          "start": 110.344,
+          "end": 110.52,
+          "conf": 0.69
+        },
+        {
+          "w": "VIP",
+          "start": 110.52,
+          "end": 110.94,
+          "conf": 0.66,
+          "syl": [
+            [
+              110.52,
+              110.68
+            ],
+            [
+              110.68,
+              110.76
+            ],
+            [
+              110.76,
+              110.94
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "i": 28,
+      "text": "When the last game’s over, you flop by my feet",
+      "section": "Bridge",
+      "part": "bridge",
+      "start": 110.94,
+      "end": 114.18,
+      "words": [
+        {
+          "w": "When",
+          "start": 110.94,
+          "end": 111.06,
+          "conf": 0.51
+        },
+        {
+          "w": "the",
+          "start": 111.06,
+          "end": 111.12,
+          "conf": 0.59
+        },
+        {
+          "w": "last",
+          "start": 111.12,
+          "end": 111.38,
+          "conf": 0.47
+        },
+        {
+          "w": "game’s",
+          "start": 111.38,
+          "end": 111.916,
+          "conf": 0.7
+        },
+        {
+          "w": "over,",
+          "start": 111.916,
+          "end": 112.135,
+          "conf": 0.8
+        },
+        {
+          "w": "you",
+          "start": 112.135,
+          "end": 112.405,
+          "conf": 0.75
+        },
+        {
+          "w": "flop",
+          "start": 112.405,
+          "end": 112.759,
+          "conf": 0.82
+        },
+        {
+          "w": "by",
+          "start": 112.98,
+          "end": 113.2,
+          "conf": 0.59
+        },
+        {
+          "w": "my",
+          "start": 113.2,
+          "end": 113.542,
+          "conf": 0.75
+        },
+        {
+          "w": "feet",
+          "start": 113.542,
+          "end": 114.18,
+          "conf": 0.76
+        }
+      ]
+    },
+    {
+      "i": 29,
+      "text": "Still in your suit, with a dream to repeat",
+      "section": "Bridge",
+      "part": "bridge",
+      "start": 114.18,
+      "end": 118.18,
+      "words": [
+        {
+          "w": "Still",
+          "start": 114.18,
+          "end": 114.88,
+          "conf": 0.85
+        },
+        {
+          "w": "in",
+          "start": 114.88,
+          "end": 115.04,
+          "conf": 0.75
+        },
+        {
+          "w": "your",
+          "start": 115.04,
+          "end": 115.378,
+          "conf": 0.92
+        },
+        {
+          "w": "suit,",
+          "start": 115.378,
+          "end": 115.72,
+          "conf": 0.74
+        },
+        {
+          "w": "with",
+          "start": 115.72,
+          "end": 115.857,
+          "conf": 0.9
+        },
+        {
+          "w": "a",
+          "start": 116.0,
+          "end": 116.14,
+          "conf": 0.66
+        },
+        {
+          "w": "dream",
+          "start": 116.14,
+          "end": 116.6,
+          "conf": 0.95
+        },
+        {
+          "w": "to",
+          "start": 116.6,
+          "end": 116.904,
+          "conf": 0.88
+        },
+        {
+          "w": "repeat",
+          "start": 116.904,
+          "end": 118.18,
+          "conf": 0.9
+        }
+      ]
+    },
+    {
+      "i": 30,
+      "text": "One sleepy snuffle, your eyelids get slow",
+      "section": "Bridge",
+      "part": "bridge",
+      "start": 118.18,
+      "end": 121.82,
+      "words": [
+        {
+          "w": "One",
+          "start": 118.18,
+          "end": 118.351,
+          "conf": 0.74
+        },
+        {
+          "w": "sleepy",
+          "start": 118.351,
+          "end": 119.005,
+          "conf": 0.91
+        },
+        {
+          "w": "snuffle,",
+          "start": 119.005,
+          "end": 119.56,
+          "conf": 0.73
+        },
+        {
+          "w": "your",
+          "start": 119.56,
+          "end": 119.848,
+          "conf": 0.86
+        },
+        {
+          "w": "eyelids",
+          "start": 119.848,
+          "end": 120.48,
+          "conf": 0.63
+        },
+        {
+          "w": "get",
+          "start": 120.48,
+          "end": 120.761,
+          "conf": 0.86
+        },
+        {
+          "w": "slow",
+          "start": 120.761,
+          "end": 121.82,
+          "conf": 0.87
+        }
+      ]
+    },
+    {
+      "i": 31,
+      "text": "My little gentleman, stealing the show",
+      "section": "Bridge",
+      "part": "bridge",
+      "start": 121.82,
+      "end": 125.5,
+      "words": [
+        {
+          "w": "My",
+          "start": 121.82,
+          "end": 122.32,
+          "conf": 0.71
+        },
+        {
+          "w": "little",
+          "start": 122.32,
+          "end": 122.74,
+          "conf": 0.74
+        },
+        {
+          "w": "gentleman,",
+          "start": 122.74,
+          "end": 123.464,
+          "conf": 0.85
+        },
+        {
+          "w": "stealing",
+          "start": 123.464,
+          "end": 124.14,
+          "conf": 0.85
+        },
+        {
+          "w": "the",
+          "start": 124.14,
+          "end": 124.238,
+          "conf": 0.67
+        },
+        {
+          "w": "show",
+          "start": 124.238,
+          "end": 125.5,
+          "conf": 0.83
+        }
+      ]
+    },
+    {
+      "i": 32,
+      "text": "Dance, Gryffy, tear up the floor",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 125.5,
+      "end": 127.75,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 125.5,
+          "end": 125.9,
+          "conf": 0.61
+        },
+        {
+          "w": "Gryffy,",
+          "start": 125.9,
+          "end": 126.32,
+          "conf": 0.83
+        },
+        {
+          "w": "tear",
+          "start": 126.32,
+          "end": 126.68,
+          "conf": 0.86
+        },
+        {
+          "w": "up",
+          "start": 126.68,
+          "end": 126.847,
+          "conf": 0.87
+        },
+        {
+          "w": "the",
+          "start": 126.847,
+          "end": 126.946,
+          "conf": 0.97
+        },
+        {
+          "w": "floor",
+          "start": 126.946,
+          "end": 127.75,
+          "conf": 0.92
+        }
+      ]
+    },
+    {
+      "i": 33,
+      "text": "Little tuxedo king, give us one more",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 127.94,
+      "end": 131.536,
+      "words": [
+        {
+          "w": "Little",
+          "start": 127.94,
+          "end": 128.38,
+          "conf": 0.8
+        },
+        {
+          "w": "tuxedo",
+          "start": 128.38,
+          "end": 129.04,
+          "conf": 0.91
+        },
+        {
+          "w": "king,",
+          "start": 129.04,
+          "end": 129.556,
+          "conf": 0.85
+        },
+        {
+          "w": "give",
+          "start": 129.7,
+          "end": 130.024,
+          "conf": 0.86
+        },
+        {
+          "w": "us",
+          "start": 130.024,
+          "end": 130.289,
+          "conf": 0.84
+        },
+        {
+          "w": "one",
+          "start": 130.289,
+          "end": 130.64,
+          "conf": 0.85
+        },
+        {
+          "w": "more",
+          "start": 130.64,
+          "end": 131.536,
+          "conf": 0.88
+        }
+      ]
+    },
+    {
+      "i": 34,
+      "text": "Snort, spin, bring it right back around",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 131.536,
+      "end": 134.859,
+      "words": [
+        {
+          "w": "Snort,",
+          "start": 131.536,
+          "end": 132.03,
+          "conf": 0.77
+        },
+        {
+          "w": "spin,",
+          "start": 132.03,
+          "end": 132.64,
+          "conf": 0.88
+        },
+        {
+          "w": "bring",
+          "start": 132.64,
+          "end": 133.0,
+          "conf": 0.89
+        },
+        {
+          "w": "it",
+          "start": 133.0,
+          "end": 133.08,
+          "conf": 0.67
+        },
+        {
+          "w": "right",
+          "start": 133.08,
+          "end": 133.457,
+          "conf": 0.87
+        },
+        {
+          "w": "back",
+          "start": 133.54,
+          "end": 133.916,
+          "conf": 0.71
+        },
+        {
+          "w": "around",
+          "start": 133.916,
+          "end": 134.859,
+          "conf": 0.82
+        }
+      ]
+    },
+    {
+      "i": 35,
+      "text": "My silly Frenchton, best boy in town",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 135.123,
+      "end": 139.84,
+      "words": [
+        {
+          "w": "My",
+          "start": 135.123,
+          "end": 135.248,
+          "conf": 0.81
+        },
+        {
+          "w": "silly",
+          "start": 135.248,
+          "end": 135.727,
+          "conf": 0.91
+        },
+        {
+          "w": "Frenchton,",
+          "start": 135.727,
+          "end": 136.7,
+          "conf": 0.86
+        },
+        {
+          "w": "best",
+          "start": 136.7,
+          "end": 137.083,
+          "conf": 0.92
+        },
+        {
+          "w": "boy",
+          "start": 137.14,
+          "end": 137.52,
+          "conf": 0.89
+        },
+        {
+          "w": "in",
+          "start": 137.52,
+          "end": 137.82,
+          "conf": 0.85
+        },
+        {
+          "w": "town",
+          "start": 137.82,
+          "end": 139.84,
+          "conf": 0.86
+        }
+      ]
+    },
+    {
+      "i": 36,
+      "text": "Dance, Gryffy, run wild, run free",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 139.84,
+      "end": 144.98,
+      "words": [
+        {
+          "w": "Dance,",
+          "start": 139.84,
+          "end": 141.62,
+          "conf": 0.53
+        },
+        {
+          "w": "Gryffy,",
+          "start": 141.62,
+          "end": 142.506,
+          "conf": 0.74
+        },
+        {
+          "w": "run",
+          "start": 142.78,
+          "end": 143.22,
+          "conf": 0.69
+        },
+        {
+          "w": "wild,",
+          "start": 143.22,
+          "end": 143.938,
+          "conf": 0.68
+        },
+        {
+          "w": "run",
+          "start": 143.938,
+          "end": 144.312,
+          "conf": 0.51
+        },
+        {
+          "w": "free",
+          "start": 144.367,
+          "end": 144.98,
+          "conf": 0.77
+        }
+      ]
+    },
+    {
+      "i": 37,
+      "text": "That bright green ball’s your VIP",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 144.98,
+      "end": 150.2,
+      "words": [
+        {
+          "w": "That",
+          "start": 144.98,
+          "end": 145.28,
+          "conf": 0.67
+        },
+        {
+          "w": "bright",
+          "start": 145.28,
+          "end": 145.66,
+          "conf": 0.61
+        },
+        {
+          "w": "green",
+          "start": 145.66,
+          "end": 146.12,
+          "conf": 0.89
+        },
+        {
+          "w": "ball’s",
+          "start": 146.12,
+          "end": 146.4,
+          "conf": 0.79
+        },
+        {
+          "w": "your",
+          "start": 146.4,
+          "end": 146.62,
+          "conf": 0.76
+        },
+        {
+          "w": "VIP",
+          "start": 146.62,
+          "end": 150.2,
+          "conf": 0.71,
+          "syl": [
+            [
+              146.62,
+              147.66
+            ],
+            [
+              147.66,
+              148.36
+            ],
+            [
+              148.36,
+              150.2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "i": 38,
+      "text": "Bright green ball’s your VIP",
+      "section": "Final Chorus",
+      "part": "finalchorus",
+      "start": 150.2,
+      "end": 154.44,
+      "words": [
+        {
+          "w": "Bright",
+          "start": 150.2,
+          "end": 152.44,
+          "conf": 0.6
+        },
+        {
+          "w": "green",
+          "start": 152.44,
+          "end": 153.3,
+          "conf": 0.62
+        },
+        {
+          "w": "ball’s",
+          "start": 153.3,
+          "end": 153.58,
+          "conf": 0.68
+        },
+        {
+          "w": "your",
+          "start": 153.58,
+          "end": 153.7,
+          "conf": 0.75
+        },
+        {
+          "w": "VIP",
+          "start": 153.7,
+          "end": 154.44,
+          "conf": 0.52,
+          "syl": [
+            [
+              153.7,
+              153.9
+            ],
+            [
+              153.9,
+              154.14
+            ],
+            [
+              154.14,
+              154.44
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "i": 39,
+      "text": "Good boy, Gryffy, the party winds down",
+      "section": "Outro",
+      "part": "outro",
+      "start": 154.44,
+      "end": 158.0,
+      "words": [
+        {
+          "w": "Good",
+          "start": 154.44,
+          "end": 154.66,
+          "conf": 0.78
+        },
+        {
+          "w": "boy,",
+          "start": 154.66,
+          "end": 155.08,
+          "conf": 0.85
+        },
+        {
+          "w": "Gryffy,",
+          "start": 155.08,
+          "end": 155.751,
+          "conf": 1.0
+        },
+        {
+          "w": "the",
+          "start": 155.98,
+          "end": 156.305,
+          "conf": 0.85
+        },
+        {
+          "w": "party",
+          "start": 156.42,
+          "end": 156.839,
+          "conf": 1.0
+        },
+        {
+          "w": "winds",
+          "start": 156.839,
+          "end": 157.32,
+          "conf": 0.94
+        },
+        {
+          "w": "down",
+          "start": 157.32,
+          "end": 158.0,
+          "conf": 0.93
+        }
+      ]
+    },
+    {
+      "i": 40,
+      "text": "Tuxedo tucked in, ball close at your paws",
+      "section": "Outro",
+      "part": "outro",
+      "start": 158.0,
+      "end": 161.633,
+      "words": [
+        {
+          "w": "Tuxedo",
+          "start": 158.0,
+          "end": 158.68,
+          "conf": 0.96
+        },
+        {
+          "w": "tucked",
+          "start": 158.68,
+          "end": 159.053,
+          "conf": 0.92
+        },
+        {
+          "w": "in,",
+          "start": 159.053,
+          "end": 159.36,
+          "conf": 0.81
+        },
+        {
+          "w": "ball",
+          "start": 159.36,
+          "end": 160.22,
+          "conf": 0.96
+        },
+        {
+          "w": "close",
+          "start": 160.22,
+          "end": 160.74,
+          "conf": 0.85
+        },
+        {
+          "w": "at",
+          "start": 160.74,
+          "end": 160.92,
+          "conf": 0.92
+        },
+        {
+          "w": "your",
+          "start": 160.92,
+          "end": 161.12,
+          "conf": 1.0
+        },
+        {
+          "w": "paws",
+          "start": 161.12,
+          "end": 161.633,
+          "conf": 1.0
+        }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "start": 0.94,
+      "end": 2.11,
+      "desc": "unlisted vocal (backing vocal / ad-lib / breath)"
+    },
+    {
+      "start": 53.89,
+      "end": 59.56,
+      "desc": "vocal tag before verse 2 (Whisper: '…green … VIP'), not in lyrics.txt"
+    }
+  ],
+  "notes": "Timeline = gapless mp3 decode (same as data/audio.json); Demucs stems shifted to match (analysis/stems.py measures the lag). Method: (1) CTC emissions (20 ms frames) of the Demucs vocal stem from two acoustic models, torchaudio MMS_FA and wav2vec2-large-lv60k-960h, each on the mono sum and on the left and right channels, fused as a probability mixture; (2) one global constrained Viterbi forced alignment of all lines over the whole song with a garbage 'star' token between lines to absorb ad-libs; acronyms and odd words aligned with the phonetic spellings in song.json 'pron'; (3) signal refinement per syllable unit on the vocal stem: start moved to the voice re-entry after a rest, snapped to the nearest spectral-flux onset, or moved back to the start of s/sh/ch/f/th frication; ends = next word start when legato, else when the voice drops 15 dB below the word level; (4) cross-check against mlx-whisper large-v3-turbo word timestamps and the individual models/channels; (5) manual corrections from song.json 'align'. conf: 0.35 + agreement of the independent alignments (<=60 ms) + CTC posterior + Whisper agreement; manual fixes carry their own conf. 'syl' = start/end of each sub-word of a word spelled as several (acronyms, hyphenated compounds). lyrics.txt follows the vocal, not the Suno prompt: chorus 1 repeats its last couplet and the final chorus ends on an extra 'Bright green ball’s your VIP' (Whisper cross-check)."
+}

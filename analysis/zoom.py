@@ -1,4 +1,8 @@
-"""Quick high-res zoom plot of the vocal stem: python zoom.py t0 t1 [name]"""
+"""High-res zoom plots of the vocal stem around aligned words (qa/<song>/).
+
+  SONG=<slug> uv run python zoom.py t0 t1 [name]
+  SONG=<slug> uv run python zoom.py lines [line indices...]
+"""
 import common, sys, json
 import numpy as np
 import matplotlib
@@ -34,7 +38,7 @@ def zoom(t0, t1, name):
     ax[2].plot(tt, f["mid_db"][i0:i1] - 40, "tab:red", lw=0.8, label="mid-40")
     axb = ax[2].twinx(); axb.fill_between(tt, 0, f["onset"][i0:i1], color="tab:green", alpha=0.3)
     ax[2].legend(loc="upper left", fontsize=7); ax[2].set_ylim(-70, 5)
-    P, OFF = 60 / 132, 0.708
+    P, OFF = common.beat_grid() or (0.5, 0.0)
     for n in range(int((t0 - OFF) / P * 4) - 1, int((t1 - OFF) / P * 4) + 2):
         tb = OFF + n * P / 4
         if t0 <= tb <= t1:
@@ -52,7 +56,6 @@ def zoom(t0, t1, name):
         i = dbg.index(w)
         ax[3].plot([alt["mms"][i]["start"]] * 2, [0.1, 0.45], color="tab:purple", lw=2)
         ax[3].plot([alt["lv60k"][i]["start"]] * 2, [0.1, 0.45], color="tab:orange", lw=2)
-        ax[3].plot([alt["fused_lead"][i]["start"]] * 2, [0.1, 0.3], color="tab:green", lw=2)
         if w.get("whisper"):
             ax[3].plot([w["whisper"][0]] * 2, [0.1, 0.35], color="k", lw=2)
     ax[3].set_ylim(0, 1.6); ax[3].set_yticks([])
@@ -66,7 +69,7 @@ def zoom(t0, t1, name):
 
 if __name__ == "__main__":
     if sys.argv[1] == "lines":
-        L = common.load_lyrics_src()
+        L = common.load_lyrics()
         only = [int(x) for x in sys.argv[2:]] or range(len(L))
         for li in only:
             ws = [w for w in dbg if w["li"] == li]

@@ -1,0 +1,54 @@
+{
+  "title": "Dance, Gryffy",
+  "artist": "rockingcrossover597",
+  "suno": {
+    "id": "4f0facea-85ba-4d28-adfa-1c7a19bc68ea",
+    "created": "2026-09-29T18:44:57Z"
+  },
+  "whisper_prompt": "Dance, Gryffy. A song about Gryffy, a Frenchton in a tiny tux and bow tie, and his bright green ball.",
+  "pron": {
+    "VIP": "vee eye pee",
+    "Gryffy": "griffy"
+  },
+  "align": {
+    "fix": [],
+    "extras": [
+      {
+        "start": 58.2,
+        "end": 60.1,
+        "desc": "vocal tag before verse 2 (Whisper: '…green … VIP'), not in lyrics.txt"
+      }
+    ],
+    "notes": "lyrics.txt follows the vocal, not the Suno prompt: chorus 1 repeats its last couplet and the final chorus ends on an extra 'Bright green ball’s your VIP' (Whisper cross-check).",
+    "line_windows": [
+      {
+        "line": 10,
+        "lo": 39.4,
+        "hi": 44.2,
+        "note": "chorus 1 couplet, 1st time: MMS, LV60K and Whisper agree; fused path ran a line late"
+      },
+      {
+        "line": 11,
+        "lo": 43.9,
+        "hi": 46.6
+      },
+      {
+        "line": 12,
+        "lo": 46.6,
+        "hi": 51.3,
+        "note": "2nd time"
+      },
+      {
+        "line": 13,
+        "lo": 51.0,
+        "hi": 53.8
+      },
+      {
+        "line": 14,
+        "lo": 59.4,
+        "hi": 63.9,
+        "note": "after the unlisted tag at 58.2-60.1 (Whisper: '...nose' at 60.6)"
+      }
+    ]
+  }
+}

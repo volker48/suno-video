@@ -3,8 +3,11 @@
 Two acoustic models give two independent alignments:
   mms   : torchaudio MMS_FA (multilingual, romanized chars, trained for alignment)
   lv60k : torchaudio WAV2VEC2_ASR_LARGE_LV60K_960H (English chars)
+Each runs on the Demucs vocal stem's mono sum and its left and right channel.
 Emissions are computed on overlapping chunks with context and stitched, then
-cached to work/emission_<name>.npy (shape [frames, vocab]).
+cached to work/<song>/emission_<name>[_<source>].npy (shape [frames, vocab]).
+
+Run:  SONG=<slug> uv run python ctc_emissions.py
 """
 import common
 import sys
@@ -51,7 +54,7 @@ def compute(name, chunk_s=20.0, ctx_s=3.0, device=None, source="vocals"):
 
 
 if __name__ == "__main__":
-    srcs = sys.argv[1:] or ["vocals", "lead", "vocL", "vocR"]
+    srcs = sys.argv[1:] or ["vocals", "vocL", "vocR"]
     for src in srcs:
         for n in ("mms", "lv60k"):
             compute(n, source=src)
