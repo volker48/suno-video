@@ -10,11 +10,12 @@ import { Layer2D, W, H, clearRT } from '../../../engine/gl';
 import { LIN, rgba } from '../../../engine/palette';
 import { F, font, layout, measure } from '../../../engine/type';
 import { Lyrics, type Line } from '../../../engine/lyrics';
-import { clamp, ease, hash, lerp, prog, pulse, smoothstep, springStep, TAU } from '../../../engine/util';
+import { clamp, ease, prog, pulse, smoothstep, springStep, TAU } from '../../../engine/util';
 import { drawSmear, drawTop, type TopPose } from './gryffy';
 import { drawRun, piecesOf, runText, type RunStyle } from './karaoke';
 import { drawNosePrint, drawSmoosh } from './smoosh';
-import { type Cam, drawParquet, PLANK, ROW, withCam } from './parquet';
+import { drawTornRun } from './zoomies';
+import { type Cam, drawParquet, withCam } from './parquet';
 import { ball, paw } from './props';
 
 const PATH_Y = 330;
@@ -60,47 +61,8 @@ export default class Floor extends Scene {
 
   // ---------------------------------------------------------------- 1. tear up the floor
 
-  private runX(t: number) { return lerp(-350, 2350, (t - this.run0) / (this.run1 - this.run0)); }
-
   private tearUp(c: CanvasRenderingContext2D, t: number) {
-    const cam: Cam = { x: W / 2, y: H / 2, zoom: 1, rot: 0 };
-    // a plank on the run's rows is torn up as he passes over it
-    const rows = new Set([Math.floor((PATH_Y - 40) / ROW), Math.floor(PATH_Y / ROW), Math.floor((PATH_Y + 40) / ROW)]);
-    const passT = (x: number) => this.run0 + ((x + 350) / 2700) * (this.run1 - this.run0);
-    const peel = (r: number, i: number) => {
-      if (!rows.has(r)) return 0;
-      const off = ((r * 149) % PLANK + PLANK) % PLANK;
-      return prog(t, passT(off + i * PLANK + PLANK / 2) + 0.03, passT(off + i * PLANK + PLANK / 2) + 0.6);
-    };
-    withCam(c, cam, () => {
-      drawParquet(c, cam, peel);
-      // the torn planks fly up at the camera, spinning, then fall away
-      for (const r of rows) {
-        const off = ((r * 149) % PLANK + PLANK) % PLANK;
-        for (let i = -2; i < 8; i++) {
-          const k = peel(r, i);
-          if (k <= 0 || k >= 1) continue;
-          const x = off + i * PLANK + PLANK / 2, y = r * ROW + ROW / 2;
-          const up = Math.sin(Math.PI * k);
-          c.save();
-          c.translate(x + 60 * k * (hash(r, i) - 0.5), y - 220 * up - 120 * k);
-          c.rotate((hash(i, r) - 0.5) * 2.2 * k);
-          const sc = 1 + 0.45 * up;
-          c.scale(sc, sc * Math.abs(Math.cos(k * 2.6)) + 0.08);
-          c.globalAlpha = 0.85 * (1 - smoothstep(0.55, 1, k));
-          c.fillStyle = '#26262A'; c.fillRect(-PLANK / 2, -ROW / 2, PLANK, ROW);
-          c.strokeStyle = rgba('ash', 0.25); c.lineWidth = 1;
-          c.beginPath(); c.moveTo(-PLANK / 2 + 12, -8); c.lineTo(PLANK / 2 - 12, -4); c.moveTo(-PLANK / 2 + 12, 12); c.lineTo(PLANK / 2 - 12, 10); c.stroke();
-          c.strokeStyle = rgba('bone', 0.5); c.lineWidth = 1.5; c.strokeRect(-PLANK / 2, -ROW / 2, PLANK, ROW);
-          c.restore();
-        }
-      }
-      // Gryffy, flat out
-      if (t > this.run0 - 0.1 && t < this.run1 + 0.1) {
-        drawSmear(c, Array.from({ length: 12 }, (_, g) => [this.runX(t - g * 0.02) - 120, PATH_Y] as [number, number]), 150);
-        drawTop(c, this.topAt(this.runX(t), PATH_Y, 0, t, 1.3, 400));
-      }
-    });
+    drawTornRun(c, t, this.run0, this.run1, PATH_Y);
     // the lyric, set into the floor above his lane
     const st: RunStyle = { family: F.archivo(100, 900), size: 150, ink: rgba('bone'), dim: 0.22, lit: rgba('signal'), lead: 3 };
     const ps = piecesOf(this.l6);

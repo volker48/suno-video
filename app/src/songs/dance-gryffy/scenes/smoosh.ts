@@ -2,10 +2,11 @@
 // the plate where it lands (crouch: the approach and the hit) and the plate after it (floor: the
 // peel-away and the nose print left on the glass).
 import { rgba } from '../../../engine/palette';
-import { clamp, ease, lerp } from '../../../engine/util';
+import { clamp, ease, lerp, TAU } from '../../../engine/util';
 import { W } from '../../../engine/gl';
 import { drawFront } from './gryffy';
 import { drawGiraffe } from './giraffe';
+import { ball } from './props';
 
 export interface SmooshState {
   /** 0 = far away, 1 = on the glass. */
@@ -16,6 +17,8 @@ export interface SmooshState {
   pull: number;
   /** Neck fold of the giraffe (the second smoosh goes in head first). */
   fold: number;
+  /** The toy: the giraffe (default) or, for the last smoosh, the ball itself. */
+  toy?: 'giraffe' | 'ball';
 }
 
 /** Where his nose meets the glass (canvas px), and the print's radius. */
@@ -33,10 +36,22 @@ export function drawSmoosh(c: CanvasRenderingContext2D, s: SmooshState) {
   c.filter = `blur(${(3 + 9 * k).toFixed(1)}px)`;
   drawFront(c, fx, fy, r, s.push * (1 - out));
   c.restore();
-  // the giraffe, held crosswise in his mouth, in focus on the glass
-  const size = lerp(170, 1100, k);
-  const gx = lerp(fx - 60, 880, a), gy = lerp(fy + r * 0.6, 800, a) + 1300 * out;
-  drawGiraffe(c, gx, gy, size, { squash: s.push * (1 - out), fold: s.fold, rot: -0.05 + 0.25 * out });
+  if (s.toy === 'ball') {
+    // the ball, pressed flat on the glass: squashed wide, a pale contact patch, its seams
+    const R = lerp(60, 520, k), sq = s.push * (1 - out);
+    const bx = 960, by = lerp(fy + r * 0.7, 700, a) + 1300 * out;
+    c.save(); c.translate(bx, by); c.scale(1 + 0.1 * sq, 1 - 0.08 * sq);
+    ball(c, 0, 0, R, 1, 0.5);
+    const g = c.createRadialGradient(0, 0, 0, 0, 0, R * 0.8);
+    g.addColorStop(0, `rgba(245,255,200,${0.55 * sq})`); g.addColorStop(1, 'rgba(245,255,200,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, 0, R * 0.8, 0, TAU); c.fill();
+    c.restore();
+  } else {
+    // the giraffe, held crosswise in his mouth, in focus on the glass
+    const size = lerp(170, 1100, k);
+    const gx = lerp(fx - 60, 880, a), gy = lerp(fy + r * 0.6, 800, a) + 1300 * out;
+    drawGiraffe(c, gx, gy, size, { squash: s.push * (1 - out), fold: s.fold, rot: -0.05 + 0.25 * out });
+  }
   // the glass itself: a faint diagonal sheen while something is pressed on it
   const on = a * (1 - out);
   if (on > 0.5) {
@@ -48,11 +63,12 @@ export function drawSmoosh(c: CanvasRenderingContext2D, s: SmooshState) {
   }
 }
 
-/** The nose print he leaves on the lens: a soft smudge with the texture of a nose. */
-export function drawNosePrint(c: CanvasRenderingContext2D, alpha: number) {
+/** The nose print he leaves on the lens: a soft smudge with the texture of a nose (`scale` for a bigger one). */
+export function drawNosePrint(c: CanvasRenderingContext2D, alpha: number, scale = 1) {
   if (alpha <= 0) return;
   const [x, y, r] = NOSE;
   c.save();
+  c.translate(x, y); c.scale(scale, scale); c.translate(-x, -y);
   c.globalAlpha = alpha;
   const g = c.createRadialGradient(x, y, 0, x, y, r);
   g.addColorStop(0, rgba('bone', 0.2));
