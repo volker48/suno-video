@@ -4,6 +4,7 @@ import { Engine, type AdaptiveSampling } from './engine/engine';
 import { PW, PH, SCALE } from './engine/gl';
 import { timelineFor } from './timeline';
 import { loadSong, pickSong, type Song } from './song';
+import { applyPalette } from './engine/glsl/common';
 
 const params = new URLSearchParams(location.search);
 const EXPORT = params.has('export');
@@ -26,6 +27,7 @@ let TIMELINE: Engine['timeline'] = [];
 async function boot() {
   const song = await loadSong(pickSong(params.get('song')));
   document.title = song.meta.title;
+  if (song.meta.palette) applyPalette(song.meta.palette);
   engine = new Engine(canvas, await timelineFor(song.slug));
   const onlySet = ONLY ? new Set(ONLY.split(',')) : null;
   await engine.init(song, onlySet ? (e) => onlySet.has(e.id) : undefined);

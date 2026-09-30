@@ -1,6 +1,17 @@
 {
   "title": "Dance, Gryffy",
   "artist": "rockingcrossover597",
+  "palette": {
+    "ink": "#0B0B0C",
+    "ink2": "#17171A",
+    "graphite": "#5C5B58",
+    "ash": "#9C978F",
+    "bone": "#F1EEE7",
+    "signal": "#D8FF3C",
+    "ember": "#F2FFB0",
+    "blood": "#6F8A00",
+    "accent": "#E8B25A"
+  },
   "suno": {
     "id": "4f0facea-85ba-4d28-adfa-1c7a19bc68ea",
     "created": "2026-09-29T18:44:57Z"

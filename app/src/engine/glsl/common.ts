@@ -1,13 +1,23 @@
-import { LIN } from '../palette';
+import { LIN, setPalette } from '../palette';
 import { SCALE } from '../scale';
 
 const v3 = (c: [number, number, number]) => `vec3(${c.map((x) => x.toFixed(5)).join(',')})`;
 
 /**
  * Shared GLSL (ES 3.0) prepended to every FSPass. Also importable into custom three.js
- * ShaderMaterials. Palette colours are LINEAR RGB.
+ * ShaderMaterials (read it when building the material, not at module load: applyPalette replaces
+ * it). Palette colours are LINEAR RGB.
  */
-export const GLSL_COMMON = /* glsl */ `
+export let GLSL_COMMON = build();
+
+/** Retunes the palette (song.json "palette") and rebuilds GLSL_COMMON; call before building scenes. */
+export function applyPalette(values: Record<string, string>) {
+  setPalette(values);
+  GLSL_COMMON = build();
+}
+
+function build() {
+  return /* glsl */ `
 #define PI 3.14159265359
 #define TAU 6.28318530718
 // Output scale: physical px per logical (1920x1080) px. gl_FragCoord, fwidth and dFdx are in
@@ -162,3 +172,4 @@ vec3 heat(float x) {
   return mix(c, vec3(1.0, 0.93, 0.85), smoothstep(0.8, 1.0, x));
 }
 `;
+}

@@ -6,6 +6,8 @@ declare const __SONGS__: string[];
 export interface SongMeta {
   title: string;
   artist?: string;
+  /** Palette values replacing the defaults for this song (keys of palette.ts HEX, #RRGGBB). */
+  palette?: Record<string, string>;
 }
 
 export interface Song {
