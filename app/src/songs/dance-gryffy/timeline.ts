@@ -5,7 +5,7 @@ import type { TimelineFactory } from '../../timeline';
 import { cuts, scene } from '../../timeline';
 
 /** Plates that have their own scene module in ./scenes/ (the rest fall back to 'lyrics'). */
-const BUILT = new Set<string>(['invite', 'arrival', 'crouch', 'floor', 'vip', 'king']);
+const BUILT = new Set<string>(['invite', 'arrival', 'crouch', 'floor', 'vip', 'king', 'intermission', 'profile']);
 
 const plate = (name: string, label: string): Pick<TimelineEntry, 'load' | 'module' | 'params'> =>
   BUILT.has(name) ? scene(`dance-gryffy/${name}`) : { ...scene('lyrics'), params: { label } };
@@ -33,7 +33,8 @@ const timeline: TimelineFactory = (ly, au) => {
     ['vip1', 'vip', 'Chorus', cut('run wild, run free', 0), { n: 1 }],
     ['intermission', 'intermission', 'Instrumental', section('instrumental1').start],
     ['profile', 'profile', 'Verse 2', cut('Button nose')],
-    ['crouch2', 'crouch', 'Pre-Chorus', cut('You crouch down low', 1), { n: 2 }],
+    // verse 2 ends on "…it all" a moment past the beat: cut on the next line's first word
+    ['crouch2', 'crouch', 'Pre-Chorus', ly.get('You crouch down low', 1).start - 0.02, { n: 2 }],
     ['chorusline', 'chorusline', 'Chorus', onWord('tear up the floor', 'tear', 1)],
     ['vip2', 'vip', 'Chorus', cut('run wild, run free', 2), { n: 2 }],
     // the second chorus's last VIP runs up to the bridge's first word: cut on that word's beat

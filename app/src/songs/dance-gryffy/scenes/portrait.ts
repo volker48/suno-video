@@ -23,6 +23,19 @@ export interface PortraitView {
 
 /** The default crop of ref/tuxedo.jpg: ears to bow tie. */
 export const TUX_CROP = { u: 0.37, v: 0.47, hv: 0.34 };
+/** ref/tuxedo.jpg's height / width (1448 / 1086). */
+export const TUX_ASPECT = 1448 / 1086;
+/** Features of ref/tuxedo.jpg in uv (y down), for callouts and props. */
+export const TUX_FEATURES = {
+  crown: [0.37, 0.44], nose: [0.267, 0.5], lip: [0.252, 0.589], mouthCorner: [0.2, 0.6],
+  eyeL: [0.185, 0.445], eyeR: [0.4, 0.483], earL: [0.2, 0.3], bowTie: [0.3, 0.67],
+} as const;
+
+/** Where a point of the photo (uv, y down) shows on screen in a portrait view. */
+export function photoPoint(v: PortraitView, u: number, vv: number): [number, number] {
+  const hu = v.hv * (v.rx / v.ry) * TUX_ASPECT * (v.mirror ? -1 : 1);
+  return [v.cx + ((u - v.u) / hu) * v.rx, v.cy + ((vv - v.v) / v.hv) * v.ry];
+}
 
 export class Portrait {
   rt = makeRT();

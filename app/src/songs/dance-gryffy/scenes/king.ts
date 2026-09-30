@@ -12,7 +12,7 @@ import type { Line } from '../../../engine/lyrics';
 import { ease, lerp, mulberry32, prog, pulse, springStep, TAU } from '../../../engine/util';
 import { drawRun, PAPER_RUN, piecesOf, type RunStyle } from './karaoke';
 import { paperPass } from './paper';
-import { Portrait, TUX_CROP, type PortraitView } from './portrait';
+import { photoPoint, Portrait, TUX_CROP, type PortraitView } from './portrait';
 import { paw } from './props';
 
 const FRAME = { cx: 720, cy: 560, rx: 290, ry: 380 };
@@ -105,7 +105,7 @@ export default class King extends Scene {
     c.restore();
     // the crown: lowered on "king", a size too big; it settles, then slips down over his left ear
     const king = this.line.words[2]!;
-    const head = this.photoToScreen(0.37, 0.44, cy);
+    const head = photoPoint(this.view({ ...FRAME, cy }), 0.37, 0.44);
     const land = springStep(t - king.start + 0.12, 3.2, 0.6);
     const slip = prog(t, king.start + 0.18, king.start + 0.42, ease.inOutCubic);
     if (t > king.start - 0.4) {
@@ -118,12 +118,6 @@ export default class King extends Scene {
     const ps = piecesOf(this.line);
     drawRun(c, ps.slice(0, 2), 1120, 470, t, st);
     drawRun(c, ps.slice(2, 3), 1120, 700, t, { ...st, size: 240 });
-  }
-
-  /** A point of the photo (uv, y down) where the framed portrait shows it on screen. */
-  private photoToScreen(u: number, v: number, cy: number): [number, number] {
-    const hv = TUX_CROP.hv, hu = hv * (FRAME.rx / FRAME.ry) * (1448 / 1086);
-    return [FRAME.cx + ((u - TUX_CROP.u) / hu) * FRAME.rx, cy + ((v - TUX_CROP.v) / hv) * FRAME.ry];
   }
 
   /** The deed: header, the crest's frame, the town plan drawing itself, the stamp and the paw signature. */
