@@ -17,3 +17,6 @@ analysis/qa/
 !/.claude/
 /.claude/*
 !/.claude/skills/
+
+# song reference originals (full-size PNGs stay local; the committed JPEGs are the references)
+songs/*/ref/*.png
