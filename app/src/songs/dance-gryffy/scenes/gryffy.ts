@@ -428,3 +428,124 @@ export function drawSide(c: CanvasRenderingContext2D, p: SidePose, o: DrawOpts =
   }
   c.restore();
 }
+
+export interface TopPose {
+  /** Canvas px of the body centre, px per unit, heading (rad, 0 = +x). */
+  x: number;
+  y: number;
+  s: number;
+  heading: number;
+  /** Gallop phase (radians; one stride per 2π) and stride amount (0 standing .. 1 flat out). */
+  phase: number;
+  stride: number;
+  /** Body length multiplier (zoomies stretch). */
+  stretch: number;
+  /** Ears blown back (0..1), head turn (rad). */
+  wind: number;
+  turn: number;
+}
+
+/**
+ * Gryffy seen from directly above: the black back with its sheen, big ears, the white fleck on
+ * the crown, the nub, and paws that show past the body as he gallops.
+ */
+export function drawTop(c: CanvasRenderingContext2D, p: TopPose, o: DrawOpts = {}) {
+  const line = o.line ?? rgba('bone', 1);
+  const rim = Math.max(1.1, 0.011 * p.s);
+  c.save();
+  c.globalAlpha = o.alpha ?? 1;
+  c.translate(p.x, p.y);
+  c.rotate(p.heading);
+  c.scale(p.s * p.stretch, p.s);
+  const lw = rim / p.s;
+  c.lineJoin = 'round'; c.lineCap = 'round';
+
+  // legs: front pair and hind pair swing in opposition, reaching past the body at full stride
+  const sw = Math.sin(p.phase) * 0.2 * p.stride, lift = Math.cos(p.phase);
+  const legs: [number, number, number][] = [
+    [0.14, 0.11, sw], [0.14, -0.11, sw * 0.8], [-0.2, 0.1, -sw], [-0.2, -0.1, -sw * 0.8],
+  ];
+  for (const [lx, ly, reach] of legs) {
+    const px = lx + reach + (lx > 0 ? 0.08 : -0.06) * p.stride, py = ly * (lx > 0 ? 1.7 : 1.3) * (1 + 0.1 * lift);
+    c.strokeStyle = line; c.lineWidth = 0.085 + 2 * lw;
+    c.beginPath(); c.moveTo(lx, ly * 0.8); c.lineTo(px, py); c.stroke();
+    c.strokeStyle = COAT; c.lineWidth = 0.085;
+    c.beginPath(); c.moveTo(lx, ly * 0.8); c.lineTo(px, py); c.stroke();
+    // the paw, a little wider than the leg
+    c.fillStyle = COAT; c.strokeStyle = line; c.lineWidth = lw;
+    c.beginPath(); c.ellipse(px + 0.02, py, 0.055, 0.05, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+  }
+  // body, head and ears as one outlined mass
+  const body = new Path2D();
+  body.ellipse(0.1, 0, 0.23, 0.19, 0, 0, Math.PI * 2);
+  body.ellipse(-0.18, 0, 0.19, 0.16, 0, 0, Math.PI * 2);
+  body.rect(-0.18, -0.15, 0.3, 0.3);
+  const hx = 0.38;
+  const head = new Path2D();
+  const ht = p.turn;
+  head.ellipse(hx + 0.03 * Math.cos(ht), 0.03 * Math.sin(ht), 0.18, 0.2, ht, 0, Math.PI * 2);
+  head.ellipse(hx + 0.13 * Math.cos(ht), 0.13 * Math.sin(ht), 0.07, 0.085, ht, 0, Math.PI * 2);
+  const ears = new Path2D();
+  for (const s of [-1, 1]) {
+    // bat ears splay out sideways from the top of the head; wind folds them back
+    const back = 0.1 * p.wind;
+    ears.moveTo(hx + 0.07, s * 0.12);
+    ears.quadraticCurveTo(hx + 0.06 - back, s * (0.33 - 0.06 * p.wind), hx - 0.02 - back * 1.6, s * (0.36 - 0.08 * p.wind));
+    ears.quadraticCurveTo(hx - 0.1 - back, s * 0.24, hx - 0.09, s * 0.1);
+    ears.closePath();
+  }
+  const nub = new Path2D(); nub.ellipse(-0.39, 0, 0.04, 0.035, 0, 0, Math.PI * 2);
+  c.strokeStyle = line; c.lineWidth = 2 * lw;
+  for (const P of [body, head, ears, nub]) c.stroke(P);
+  c.fillStyle = COAT;
+  for (const P of [body, head, ears, nub]) c.fill(P);
+  // inner ears: a sliver of pink where the ear faces forward
+  c.fillStyle = TONGUE; c.globalAlpha = (o.alpha ?? 1) * 0.75;
+  for (const s of [-1, 1]) {
+    const back = 0.1 * p.wind;
+    c.beginPath(); c.moveTo(hx + 0.04, s * 0.15); c.quadraticCurveTo(hx + 0.03 - back, s * (0.3 - 0.06 * p.wind), hx - 0.01 - back * 1.6, s * (0.32 - 0.08 * p.wind)); c.quadraticCurveTo(hx - 0.06 - back, s * 0.22, hx - 0.05, s * 0.14); c.fill();
+  }
+  c.globalAlpha = o.alpha ?? 1;
+  // the spine's sheen and the fleck on the crown
+  c.strokeStyle = line; c.lineWidth = lw * 0.9;
+  for (const k of [-1, 0, 1]) {
+    c.globalAlpha = (o.alpha ?? 1) * (k ? 0.18 : 0.35);
+    c.beginPath(); c.moveTo(-0.3, k * 0.05); c.quadraticCurveTo(0, k * 0.07, 0.24, k * 0.05); c.stroke();
+  }
+  c.globalAlpha = o.alpha ?? 1;
+  c.lineWidth = 0.022;
+  c.beginPath(); c.moveTo(hx + 0.07 * Math.cos(ht), 0.07 * Math.sin(ht)); c.lineTo(hx - 0.04 * Math.cos(ht), -0.04 * Math.sin(ht)); c.stroke();
+  // nose tip
+  c.fillStyle = '#000';
+  c.beginPath(); c.ellipse(hx + 0.19 * Math.cos(ht), 0.19 * Math.sin(ht), 0.03, 0.035, ht, 0, Math.PI * 2); c.fill();
+  c.restore();
+}
+
+/**
+ * The black-and-white blur behind him at speed: a streak along his recent positions (newest first),
+ * tapering and fading, with two bone speed lines along its edges.
+ */
+export function drawSmear(c: CanvasRenderingContext2D, pts: [number, number][], width: number, alpha = 1) {
+  const n = pts.length;
+  if (n < 2) return;
+  c.save();
+  c.lineCap = 'round';
+  for (let i = n - 2; i >= 0; i--) {
+    const [x0, y0] = pts[i]!, [x1, y1] = pts[i + 1]!;
+    const k = 1 - i / (n - 1);
+    c.strokeStyle = `rgba(13,13,15,${(0.85 * k * alpha).toFixed(3)})`;
+    c.lineWidth = width * (0.35 + 0.65 * k);
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
+  }
+  for (const side of [-1, 1]) {
+    for (let i = 0; i < n - 1; i++) {
+      const [x0, y0] = pts[i]!, [x1, y1] = pts[i + 1]!;
+      const k = 1 - i / (n - 1);
+      const dx = x1 - x0, dy = y1 - y0, l = Math.hypot(dx, dy) || 1;
+      const o = (side * width * (0.35 + 0.65 * k)) / 2 * 0.8;
+      c.strokeStyle = rgba('bone', 0.55 * k * alpha); c.lineWidth = 2;
+      c.beginPath(); c.moveTo(x0 - (dy / l) * o, y0 + (dx / l) * o); c.lineTo(x1 - (dy / l) * o, y1 + (dx / l) * o); c.stroke();
+    }
+  }
+  c.restore();
+}

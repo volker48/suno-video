@@ -24,18 +24,18 @@ export const NOSE: [number, number, number] = [960, 452, 105];
 /** Draws Gryffy and the giraffe coming at the lens, pressed on it, or dropping away. */
 export function drawSmoosh(c: CanvasRenderingContext2D, s: SmooshState) {
   const a = ease.inCubic(clamp(s.approach));
-  const out = ease.inCubic(clamp(s.pull));
+  const out = ease.inQuad(clamp(s.pull));
   const k = a * (1 - 0.7 * out);
   // Gryffy: small and sharp far away, huge and a little soft up against the glass
   const r = lerp(70, 560, k);
-  const fx = 960, fy = lerp(600, 360, a) + 700 * out;
+  const fx = 960, fy = lerp(600, 360, a) + 1100 * out;
   c.save();
   c.filter = `blur(${(3 + 9 * k).toFixed(1)}px)`;
   drawFront(c, fx, fy, r, s.push * (1 - out));
   c.restore();
   // the giraffe, held crosswise in his mouth, in focus on the glass
   const size = lerp(170, 1100, k);
-  const gx = lerp(fx - 60, 880, a), gy = lerp(fy + r * 0.6, 800, a) + 900 * out;
+  const gx = lerp(fx - 60, 880, a), gy = lerp(fy + r * 0.6, 800, a) + 1300 * out;
   drawGiraffe(c, gx, gy, size, { squash: s.push * (1 - out), fold: s.fold, rot: -0.05 + 0.25 * out });
   // the glass itself: a faint diagonal sheen while something is pressed on it
   const on = a * (1 - out);
