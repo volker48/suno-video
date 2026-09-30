@@ -13,7 +13,7 @@ import { ease, lerp, mulberry32, prog, pulse, springStep, TAU } from '../../../e
 import { drawRun, PAPER_RUN, piecesOf, type RunStyle } from './karaoke';
 import { paperPass } from './paper';
 import { photoPoint, Portrait, TUX_CROP, type PortraitView } from './portrait';
-import { paw } from './props';
+import { crown, paw } from './props';
 
 const FRAME = { cx: 720, cy: 560, rx: 290, ry: 380 };
 const CREST = { cx: 330, cy: 500, rx: 165, ry: 215 };
@@ -204,32 +204,4 @@ export default class King extends Scene {
     drawRun(c, ps.slice(3, 5), 150, 850, t, st);
     drawRun(c, ps.slice(5), 150, 960, t, st);
   }
-}
-
-/** A crown: a gilt band with five points, pearls on the tips and one green stone. Base centre at (x, y), width w. */
-function crown(c: CanvasRenderingContext2D, x: number, y: number, w: number, rot: number) {
-  c.save();
-  c.translate(x, y); c.rotate(rot);
-  const h = w * 0.5;
-  const p = new Path2D();
-  p.moveTo(-w / 2, 0);
-  const tips = 4;
-  for (let i = 0; i <= tips * 2; i++) {
-    const u = i / (tips * 2);
-    const tip = i % 2 === 0;
-    p.lineTo(-w / 2 + u * w, tip ? -h * (i === tips ? 1 : 0.82) : -h * 0.42);
-  }
-  p.lineTo(w / 2, 0);
-  p.closePath();
-  c.fillStyle = rgba('accent'); c.fill(p);
-  c.strokeStyle = rgba('ink', 0.8); c.lineWidth = Math.max(1, w * 0.01); c.stroke(p);
-  c.fillStyle = '#C99842'; c.fillRect(-w / 2, -h * 0.2, w, h * 0.2);
-  c.strokeRect(-w / 2, -h * 0.2, w, h * 0.2);
-  c.fillStyle = '#F6EFD8';
-  for (let i = 0; i <= tips; i++) {
-    const u = i / tips;
-    c.beginPath(); c.arc(-w / 2 + u * w, -h * (i === tips / 2 ? 1 : 0.82) - w * 0.03, w * 0.035, 0, TAU); c.fill();
-  }
-  c.fillStyle = rgba('signal'); c.beginPath(); c.arc(0, -h * 0.1, w * 0.05, 0, TAU); c.fill();
-  c.restore();
 }

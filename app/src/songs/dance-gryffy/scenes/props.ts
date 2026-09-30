@@ -23,3 +23,31 @@ export function paw(c: CanvasRenderingContext2D, r: number) {
     c.beginPath(); c.ellipse(x * r, y * r, r * 0.34, r * 0.44, x * 0.3, 0, TAU); c.fill();
   }
 }
+
+/** A crown: a gilt band with five points, pearls on the tips and one green stone. Base centre at (x, y), width w. */
+export function crown(c: CanvasRenderingContext2D, x: number, y: number, w: number, rot = 0) {
+  c.save();
+  c.translate(x, y); c.rotate(rot);
+  const h = w * 0.5;
+  const p = new Path2D();
+  p.moveTo(-w / 2, 0);
+  const tips = 4;
+  for (let i = 0; i <= tips * 2; i++) {
+    const u = i / (tips * 2);
+    const tip = i % 2 === 0;
+    p.lineTo(-w / 2 + u * w, tip ? -h * (i === tips ? 1 : 0.82) : -h * 0.42);
+  }
+  p.lineTo(w / 2, 0);
+  p.closePath();
+  c.fillStyle = rgba('accent'); c.fill(p);
+  c.strokeStyle = rgba('ink', 0.8); c.lineWidth = Math.max(1, w * 0.01); c.stroke(p);
+  c.fillStyle = '#C99842'; c.fillRect(-w / 2, -h * 0.2, w, h * 0.2);
+  c.strokeRect(-w / 2, -h * 0.2, w, h * 0.2);
+  c.fillStyle = '#F6EFD8';
+  for (let i = 0; i <= tips; i++) {
+    const u = i / tips;
+    c.beginPath(); c.arc(-w / 2 + u * w, -h * (i === tips / 2 ? 1 : 0.82) - w * 0.03, w * 0.035, 0, TAU); c.fill();
+  }
+  c.fillStyle = rgba('signal'); c.beginPath(); c.arc(0, -h * 0.1, w * 0.05, 0, TAU); c.fill();
+  c.restore();
+}

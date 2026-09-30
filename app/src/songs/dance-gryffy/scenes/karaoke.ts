@@ -3,7 +3,7 @@
 // run. Sung words are full strength, unsung ones dim; the word being sung wipes on, and on paper a
 // ball-green highlighter swipe runs behind it.
 import { Lyrics, type Line, type Word } from '../../../engine/lyrics';
-import { font, glyphX } from '../../../engine/type';
+import { font, glyphX, measure } from '../../../engine/type';
 import { rgba } from '../../../engine/palette';
 import { clamp, smoothstep } from '../../../engine/util';
 
@@ -95,3 +95,16 @@ export function drawRun(c: CanvasRenderingContext2D, ps: Piece[], x: number, y: 
 }
 
 export const PAPER_RUN = (family: string, size: number): RunStyle => ({ family, size, ink: rgba('ink'), dim: 0.22, swipe: rgba('signal') });
+
+/** Greedy word wrap of a run of pieces into rows no wider than maxW (a joined half stays with its word). */
+export function wrapRun(ps: Piece[], family: string, size: number, maxW: number): Piece[][] {
+  const rows: Piece[][] = [];
+  let row: Piece[] = [];
+  for (const p of ps) {
+    const next = [...row, p];
+    if (row.length && !p.joined && measure(runText(next), family, size) > maxW) { rows.push(row); row = [{ ...p, joined: false }]; }
+    else row = next;
+  }
+  if (row.length) rows.push(row);
+  return rows;
+}

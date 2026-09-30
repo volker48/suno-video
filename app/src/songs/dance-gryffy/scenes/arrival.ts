@@ -17,7 +17,7 @@ import { ease, lerp, prog, pulse, springStep, TAU } from '../../../engine/util';
 import { drawBowTie, drawSide, drawSmear, stand, trot, type SidePose } from './gryffy';
 import { drawRun, PAPER_RUN, piecesOf, type RunStyle } from './karaoke';
 import { Portrait, TUX_CROP } from './portrait';
-import { ball } from './props';
+import { ball, crown } from './props';
 
 const FLOOR = 880;
 const DOOR = { x0: 660, x1: 1260, top: 250 };
@@ -212,7 +212,7 @@ export default class Arrival extends Scene {
       f.strokeStyle = rgba('accent'); f.lineWidth = 12;
       f.beginPath(); f.ellipse(x, 520, 118, 148, 0, 0, TAU); f.stroke();
       // regalia: a crown on some, a ruff on others
-      if (i % 2 === 0) crown(f, x + 6, 402, 90);
+      if (i % 2 === 0) crown(f, x + 6, 402, 90, 0.1);
       else ruff(f, x, 620, 95);
     });
     // Gryffy, centre, snorting
@@ -270,15 +270,6 @@ export default class Arrival extends Scene {
     drawRun(f, ps.slice(cut), 150, 310, t, st);
     return { shake: [6 * pulse(t, gone, 0.06), 0] as [number, number] };
   }
-}
-
-/** A small crown for the ancestors. */
-function crown(c: CanvasRenderingContext2D, x: number, y: number, w: number) {
-  const h = w * 0.45;
-  c.fillStyle = rgba('accent'); c.strokeStyle = rgba('ink', 0.7); c.lineWidth = 1.5;
-  c.beginPath(); c.moveTo(x - w / 2, y);
-  for (let i = 0; i <= 8; i++) c.lineTo(x - w / 2 + (i / 8) * w, y - (i % 2 === 0 ? h : h * 0.4));
-  c.lineTo(x + w / 2, y); c.closePath(); c.fill(); c.stroke();
 }
 
 /** An Elizabethan ruff: a white pleated collar. */

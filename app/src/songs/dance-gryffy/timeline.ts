@@ -5,7 +5,7 @@ import type { TimelineFactory } from '../../timeline';
 import { cuts, scene } from '../../timeline';
 
 /** Plates that have their own scene module in ./scenes/ (the rest fall back to 'lyrics'). */
-const BUILT = new Set<string>(['invite', 'arrival', 'crouch', 'floor', 'vip', 'king', 'intermission', 'profile']);
+const BUILT = new Set<string>(['invite', 'arrival', 'crouch', 'floor', 'vip', 'king', 'intermission', 'profile', 'chorusline']);
 
 const plate = (name: string, label: string): Pick<TimelineEntry, 'load' | 'module' | 'params'> =>
   BUILT.has(name) ? scene(`dance-gryffy/${name}`) : { ...scene('lyrics'), params: { label } };
@@ -40,7 +40,8 @@ const timeline: TimelineFactory = (ly, au) => {
     // the second chorus's last VIP runs up to the bridge's first word: cut on that word's beat
     ['afterparty', 'afterparty', 'Bridge', onWord('When the last game', 'when')],
     ['encore', 'encore', 'Final Chorus', cut('tear up the floor', 2)],
-    ['goodnight', 'goodnight', 'Outro', cut('Good boy, Gryffy')],
+    // the final chorus's last VIP runs up to the outro's first word: cut on that word
+    ['goodnight', 'goodnight', 'Outro', ly.get('Good boy, Gryffy').start - 0.02],
   ];
 
   return plan.map(([id, name, label, start, params], i) => {
