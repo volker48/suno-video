@@ -5,7 +5,7 @@ import type { TimelineFactory } from '../../timeline';
 import { cuts, scene } from '../../timeline';
 
 /** Plates that have their own scene module in ./scenes/ (the rest fall back to 'lyrics'). */
-const BUILT = new Set<string>(['invite', 'arrival', 'crouch', 'floor', 'vip', 'king', 'intermission', 'profile', 'chorusline', 'afterparty', 'encore', 'rosette', 'gala']);
+const BUILT = new Set<string>(['invite', 'arrival', 'crouch', 'floor', 'vip', 'king', 'intermission', 'profile', 'chorusline', 'afterparty', 'encore', 'rosette', 'gala', 'goodnight']);
 
 const plate = (name: string, label: string): Pick<TimelineEntry, 'load' | 'module' | 'params'> =>
   BUILT.has(name) ? scene(`dance-gryffy/${name}`) : { ...scene('lyrics'), params: { label } };
