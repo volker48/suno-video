@@ -17,6 +17,8 @@ export interface PortraitView {
   dark?: boolean;
   /** 0..1 how much of the engraving has been cut (a wipe from the top). */
   reveal?: number;
+  /** Mirror the photo (he looks the other way). */
+  mirror?: boolean;
 }
 
 /** The default crop of ref/tuxedo.jpg: ears to bow tie. */
@@ -84,7 +86,7 @@ export class Portrait {
   render(renderer: THREE.WebGLRenderer, v: PortraitView) {
     const u = this.pass.u;
     (u.oval!.value as THREE.Vector4).set(v.cx, v.cy, v.rx, v.ry);
-    (u.crop!.value as THREE.Vector4).set(v.u, v.v, v.hv * (v.rx / v.ry) * this.aspect, v.hv);
+    (u.crop!.value as THREE.Vector4).set(v.u, v.v, (v.mirror ? -1 : 1) * v.hv * (v.rx / v.ry) * this.aspect, v.hv);
     u.pitch!.value = v.pitch ?? 6;
     u.angle!.value = v.angle ?? 0.5;
     u.dark!.value = v.dark ? 1 : 0;

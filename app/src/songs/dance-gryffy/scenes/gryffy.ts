@@ -549,3 +549,35 @@ export function drawSmear(c: CanvasRenderingContext2D, pts: [number, number][], 
   }
   c.restore();
 }
+
+/**
+ * A trot on the spot: diagonal pairs of paws swing together (phase in radians, one stride per 2π),
+ * each lifting on its swing; the body bobs twice per stride. Move the pose's x to travel.
+ */
+export function trot(p: SidePose, phase: number, stride = 1): SidePose {
+  const swing = (ph: number): [number, number] => [0.1 * stride * Math.sin(ph), 0.07 * stride * Math.max(0, Math.cos(ph))];
+  const a = swing(phase), b = swing(phase + Math.PI);
+  const bob = 0.012 * stride * Math.cos(2 * phase);
+  return {
+    ...p,
+    fn: [p.fn[0] + a[0], p.fn[1] + a[1]], hf: [p.hf[0] + a[0], p.hf[1] + a[1]],
+    ff: [p.ff[0] + b[0], p.ff[1] + b[1]], hn: [p.hn[0] + b[0], p.hn[1] + b[1]],
+    chest: p.chest + bob, hip: p.hip + bob,
+    pitch: p.pitch + 0.03 * stride * Math.sin(2 * phase),
+  };
+}
+
+/** His bow tie on its own (left behind in mid-air when he bolts): centre (x, y), width w px, rotation. */
+export function drawBowTie(c: CanvasRenderingContext2D, x: number, y: number, w: number, rot: number, o: DrawOpts = {}) {
+  const line = o.paper ? rgba('ink', 1) : (o.line ?? rgba('bone', 1));
+  c.save();
+  c.translate(x, y); c.rotate(rot);
+  const hw = w / 2, h = w * 0.28;
+  const bow = new Path2D();
+  bow.moveTo(0, 0); bow.lineTo(-hw, -h); bow.quadraticCurveTo(-hw * 1.12, 0, -hw, h); bow.closePath();
+  bow.moveTo(0, 0); bow.lineTo(hw, -h); bow.quadraticCurveTo(hw * 1.12, 0, hw, h); bow.closePath();
+  bow.rect(-w * 0.09, -w * 0.115, w * 0.18, w * 0.23);
+  c.fillStyle = COAT; c.fill(bow);
+  c.strokeStyle = line; c.lineWidth = Math.max(1.2, w * 0.03); c.lineJoin = 'round'; c.stroke(bow);
+  c.restore();
+}
