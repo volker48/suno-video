@@ -5,7 +5,7 @@ import type { TimelineFactory } from '../../timeline';
 import { cuts, scene } from '../../timeline';
 
 /** Plates that have their own scene module in ./scenes/ (the rest fall back to 'lyrics'). */
-const BUILT = new Set<string>(['crouch', 'floor']);
+const BUILT = new Set<string>(['crouch', 'floor', 'vip']);
 
 const plate = (name: string, label: string): Pick<TimelineEntry, 'load' | 'module' | 'params'> =>
   BUILT.has(name) ? scene(`dance-gryffy/${name}`) : { ...scene('lyrics'), params: { label } };
@@ -17,7 +17,7 @@ const timeline: TimelineFactory = (ly, au) => {
     if (!s) throw new Error(`section not found: ${name}`);
     return s;
   };
-  /** The beat nearest a word's onset: the giraffe peels away on "tear" (the nth "tear up the floor"). */
+  /** The beat nearest a word's onset (in the nth line containing q). */
   const onWord = (q: string, word: string, nth = 0) => {
     const w = ly.get(q, nth).words.find((x) => x.w.toLowerCase().startsWith(word));
     if (!w) throw new Error(`word '${word}' not in '${q}'`);
@@ -36,7 +36,8 @@ const timeline: TimelineFactory = (ly, au) => {
     ['crouch2', 'crouch', 'Pre-Chorus', cut('You crouch down low', 1), { n: 2 }],
     ['chorusline', 'chorusline', 'Chorus', onWord('tear up the floor', 'tear', 1)],
     ['vip2', 'vip', 'Chorus', cut('run wild, run free', 2), { n: 2 }],
-    ['afterparty', 'afterparty', 'Bridge', cut('When the last game')],
+    // the second chorus's last VIP runs up to the bridge's first word: cut on that word's beat
+    ['afterparty', 'afterparty', 'Bridge', onWord('When the last game', 'when')],
     ['encore', 'encore', 'Final Chorus', cut('tear up the floor', 2)],
     ['goodnight', 'goodnight', 'Outro', cut('Good boy, Gryffy')],
   ];

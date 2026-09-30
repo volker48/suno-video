@@ -14,12 +14,11 @@ import { clamp, ease, hash, lerp, prog, pulse, smoothstep, springStep, TAU } fro
 import { drawSmear, drawTop, type TopPose } from './gryffy';
 import { drawRun, piecesOf, runText, type RunStyle } from './karaoke';
 import { drawNosePrint, drawSmoosh } from './smoosh';
+import { type Cam, drawParquet, PLANK, ROW, withCam } from './parquet';
+import { ball, paw } from './props';
 
-const ROW = 64, PLANK = 384;
 const PATH_Y = 330;
 const CHART: [number, number, number] = [1150, 610, 285];
-
-interface Cam { x: number; y: number; zoom: number; rot: number }
 
 export default class Floor extends Scene {
   layer = new Layer2D();
@@ -59,45 +58,6 @@ export default class Floor extends Scene {
     return { bloom: 0.45, halation: 0, ca: 0.5, vignette: 0.4, grain: 0.05, ...post };
   }
 
-  // ---------------------------------------------------------------- the floor
-
-  private withCam(c: CanvasRenderingContext2D, cam: Cam, draw: () => void) {
-    c.save();
-    c.translate(W / 2, H / 2);
-    c.scale(cam.zoom, cam.zoom);
-    c.rotate(cam.rot);
-    c.translate(-cam.x, -cam.y);
-    draw();
-    c.restore();
-  }
-
-  /** Planks in rows, each a slightly different tone, hairline joints. `hole(row, i)` → 0..1 torn up. */
-  private floor(c: CanvasRenderingContext2D, cam: Cam, hole?: (row: number, i: number) => number) {
-    const R = Math.hypot(W, H) / 2 / cam.zoom + PLANK;
-    const r0 = Math.floor((cam.y - R) / ROW), r1 = Math.ceil((cam.y + R) / ROW);
-    for (let r = r0; r <= r1; r++) {
-      const off = ((r * 149) % PLANK + PLANK) % PLANK;
-      const i0 = Math.floor((cam.x - R - off) / PLANK), i1 = Math.ceil((cam.x + R - off) / PLANK);
-      for (let i = i0; i <= i1; i++) {
-        const x = off + i * PLANK, y = r * ROW;
-        const torn = hole ? hole(r, i) : 0;
-        const tone = 0.06 + 0.035 * hash(r, i);
-        c.fillStyle = torn > 0 ? rgba('ink', 1) : `rgba(${Math.round(255 * tone)},${Math.round(255 * tone * 0.97)},${Math.round(255 * tone * 0.93)},1)`;
-        c.fillRect(x, y, PLANK, ROW);
-        c.strokeStyle = rgba('graphite', 0.45); c.lineWidth = 1.2;
-        c.strokeRect(x, y, PLANK, ROW);
-        if (!torn) {
-          // two grain lines per plank
-          c.strokeStyle = rgba('ash', 0.07); c.lineWidth = 1;
-          for (const g of [0.3, 0.68]) {
-            const gy = y + ROW * (g + 0.08 * (hash(i, r, g) - 0.5));
-            c.beginPath(); c.moveTo(x + 10, gy); c.bezierCurveTo(x + PLANK * 0.3, gy - 4, x + PLANK * 0.6, gy + 4, x + PLANK - 10, gy); c.stroke();
-          }
-        }
-      }
-    }
-  }
-
   // ---------------------------------------------------------------- 1. tear up the floor
 
   private runX(t: number) { return lerp(-350, 2350, (t - this.run0) / (this.run1 - this.run0)); }
@@ -112,8 +72,8 @@ export default class Floor extends Scene {
       const off = ((r * 149) % PLANK + PLANK) % PLANK;
       return prog(t, passT(off + i * PLANK + PLANK / 2) + 0.03, passT(off + i * PLANK + PLANK / 2) + 0.6);
     };
-    this.withCam(c, cam, () => {
-      this.floor(c, cam, peel);
+    withCam(c, cam, () => {
+      drawParquet(c, cam, peel);
       // the torn planks fly up at the camera, spinning, then fall away
       for (const r of rows) {
         const off = ((r * 149) % PLANK + PLANK) % PLANK;
@@ -185,8 +145,8 @@ export default class Floor extends Scene {
   private blur(c: CanvasRenderingContext2D, t: number) {
     const cam: Cam = { x: 960 + 400, y: 540 - 900, zoom: 0.95, rot: 0.1 * Math.sin((t - this.l7.start) * 0.9) };
     const cx = cam.x, cy = cam.y, rx = 780, ry = 360;
-    this.withCam(c, cam, () => {
-      this.floor(c, cam);
+    withCam(c, cam, () => {
+      drawParquet(c, cam);
       const at = (tt: number) => {
         const a = this.lapAngle(tt);
         return { x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a), a };
@@ -220,7 +180,7 @@ export default class Floor extends Scene {
     const cam: Cam = { x: W / 2, y: H / 2, zoom: 1, rot: 0 };
     const w8 = this.l8.words;
     const fc: Cam = { ...cam, x: 3000, y: 1800 };
-    this.withCam(c, fc, () => this.floor(c, fc));
+    withCam(c, fc, () => drawParquet(c, fc));
     // chalk circle
     c.save();
     c.strokeStyle = rgba('bone', 0.35); c.lineWidth = 2; c.setLineDash([4, 12]);
@@ -300,26 +260,6 @@ export default class Floor extends Scene {
     c.letterSpacing = '0px';
     c.globalAlpha = 1;
   }
-}
-
-/** A paw print (pad and four toes), pointing up, `r` = pad half-width. */
-function paw(c: CanvasRenderingContext2D, r: number) {
-  c.beginPath(); c.ellipse(0, r * 0.35, r, r * 0.8, 0, 0, TAU); c.fill();
-  for (const [x, y] of [[-1.1, -0.55], [-0.4, -1.05], [0.4, -1.05], [1.1, -0.55]]) {
-    c.beginPath(); c.ellipse(x * r, y * r, r * 0.34, r * 0.44, x * 0.3, 0, TAU); c.fill();
-  }
-}
-
-/** The ball: ball green with its two seams, glowing a little. */
-export function ball(c: CanvasRenderingContext2D, x: number, y: number, r: number, scale = 1) {
-  r *= scale;
-  const g = c.createRadialGradient(x, y, r * 0.6, x, y, r * 3.2);
-  g.addColorStop(0, rgba('signal', 0.28)); g.addColorStop(1, rgba('signal', 0));
-  c.fillStyle = g; c.beginPath(); c.arc(x, y, r * 3.2, 0, TAU); c.fill();
-  c.fillStyle = rgba('signal'); c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
-  c.strokeStyle = rgba('ember', 0.9); c.lineWidth = r * 0.09; c.lineCap = 'round';
-  c.beginPath(); c.moveTo(x - r * 0.68, y - r * 0.72); c.quadraticCurveTo(x - r * 0.18, y, x - r * 0.68, y + r * 0.72); c.stroke();
-  c.beginPath(); c.moveTo(x + r * 0.68, y - r * 0.72); c.quadraticCurveTo(x + r * 0.18, y, x + r * 0.68, y + r * 0.72); c.stroke();
 }
 
 /** A line set along an arc (centred at the top), glyph by glyph, sung glyphs bone, the word being sung ball green. */
