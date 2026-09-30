@@ -581,3 +581,11 @@ export function drawBowTie(c: CanvasRenderingContext2D, x: number, y: number, w:
   c.strokeStyle = line; c.lineWidth = Math.max(1.2, w * 0.03); c.lineJoin = 'round'; c.stroke(bow);
   c.restore();
 }
+
+/** Flopped down asleep: chest on the floor, forelegs out in front, hind legs tucked, eyes shut. */
+export const flop = (p: SidePose): SidePose => ({
+  ...p,
+  chest: 0.2, hip: 0.22, lean: 0,
+  fn: [0.36, 0], ff: [0.3, 0], hn: [0.14, 0], hf: [0.2, 0],
+  pitch: -0.1, lift: -0.2, blink: 1, mouth: 0, tongue: 0.15, tail: -0.1, twitch: -0.25,
+});
