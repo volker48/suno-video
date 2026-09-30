@@ -70,20 +70,23 @@ The engine palette is retuned for this song (keys stay the same, values change; 
 
 ## Plates (scene modules)
 
-Times are approximate; exact windows come from `app/src/songs/dance-gryffy/timeline.ts`, which is derived from the aligned lyrics. Scenes look lines up by content through the `Lyrics` API, never by hard-coded times. Line numbers are 0-based, as in `data/lyrics.json`.
+Times are approximate; exact windows come from `app/src/songs/dance-gryffy/timeline.ts`, which is derived from the aligned lyrics. The long plates are built as several scene modules: `floor` + `king` (chorus 1's first half) and `encore` + `rosette` + `gala` (the final chorus). Scenes look lines up by content through the `Lyrics` API, never by hard-coded times. Line numbers are 0-based, as in `data/lyrics.json`.
 
 | id | window | lyric |
 |---|---|---|
 | `invite` | 0:00 → verse 1 | (intro) |
 | `arrival` | verse 1 (0:02–0:16) | Gryffy kicks the door… / Tiny tux… / One snort… / Then that green ball rolls… |
 | `crouch` ×2 | pre-choruses (0:16–0:24, 1:14–1:22) | You crouch down low… / Tail up, paws set… |
-| `floor` | chorus 1, first half (0:23–0:40) | Dance, Gryffy, tear up the floor… / …you own this town |
+| `floor` | chorus 1, first half (0:25–0:34) | Dance, Gryffy, tear up the floor… / …right back around |
+| `king` | chorus 1 (0:34–0:40) | My Frenchton king, you own this town |
 | `vip` ×2 | chorus 1 and chorus 2, second halves (0:40–0:54, 1:37–1:51) | Dance, Gryffy, run wild, run free / That bright green ball’s your VIP (×2) |
 | `intermission` | instrumental (0:55–0:59) | (the unlisted "…green… VIP" tag) |
 | `profile` | verse 2 (0:59–1:14) | Button nose… / Skids past the sofa… / Bow tie sideways… / He claims the rug… |
 | `chorusline` | chorus 2, first half (1:22–1:37) | Dance, Gryffy, tear up the floor… / …you own this town |
 | `afterparty` | bridge (1:51–2:06) | When the last game’s over… / …stealing the show |
-| `encore` | final chorus (2:05–2:35) | Dance, Gryffy… / Little tuxedo king, give us one more… / …best boy in town / VIP ×3 |
+| `encore` | final chorus (2:05–2:15) | Dance, Gryffy… / Little tuxedo king, give us one more / Snort, spin… |
+| `rosette` | final chorus (2:15–2:20) | My silly Frenchton, best boy in town |
+| `gala` | final chorus (2:20–2:34) | Dance, Gryffy, run wild… / That bright green ball’s your VIP / Bright green ball’s your VIP |
 | `goodnight` | outro (2:34–2:42) | Good boy, Gryffy… / Tuxedo tucked in… |
 
 ### `invite` — "You are cordially invited"
@@ -124,7 +127,7 @@ The one slow plate. The ballroom after the party: chairs up on the tables, strea
 "Dance, Gryffy, tear up the floor": he's awake instantly and the lights slam on (full zoomies). "Little tuxedo king, give us one more": the **final smoosh**. He pushes the ball itself into the lens on "one more": green fills the frame, the biggest nose print yet, and we play (the ball is thrown, the camera whips after it). "Snort, spin, bring it right back around": the dance chart, now covered edge to edge in paw prints, with one word left on it: ENCORE. "My silly Frenchton, best boy in town": a **dog-show rosette** is pinned to his lapel, ribbons in black, white and green, the lyric typeset on it: *Best Boy in Town*. "run wild, run free / That bright green ball’s your VIP" ×2: the whole gala at full tilt, the mirror ball descends and turns out to be the green ball, scattering green light spots across the room, and confetti in the three colours. The extra last line, "Bright green ball’s your VIP", holds on the ball filling the frame.
 
 ### `goodnight` — "Good boy"
-"Good boy, Gryffy, the party winds down": the invitation card from `invite`, back in its black frame. The doors are shut, and his ears relax at last. "Good boy" is handwritten across the card by a pen in single-stroke script. "Tuxedo tucked in, ball close at your paws": the engraved portrait on the card is now of him asleep in the tux with the ball tucked by his paws. Last House Rule: *The ball stays with Gryffy.* One last snore flutters the card, and it settles back exactly into the video's first frame, so the video loops.
+"Good boy, Gryffy, the party winds down": the invitation card from `invite`, back in its black frame. The doors are shut, and his ears relax at last. "Good boy" is handwritten across the card by a pen in single-stroke script. "Tuxedo tucked in, ball close at your paws": the card turns over; on its back he is asleep in the tux, drawn in ink, with the ball by his paws. Last House Rule: *The ball stays with Gryffy.* One last snore flutters the card, and it settles back exactly into the video's first frame, so the video loops.
 
 ## Technical conventions
 
