@@ -98,7 +98,7 @@ export default class Afterparty extends Scene {
     c.fillStyle = rgba('accent', 0.75 * flick);
     c.beginPath(); c.moveTo(LAMP[0] - 80, LAMP[1] + 40); c.lineTo(LAMP[0] + 80, LAMP[1] + 40); c.lineTo(LAMP[0] + 50, LAMP[1] - 50); c.lineTo(LAMP[0] - 50, LAMP[1] - 50); c.closePath(); c.fill();
     // the chandelier, tinkling on every snore
-    this.chandelier(c, 1300, 60, sn, t);
+    this.chandelier(c, 1420, 40, sn, t);
     // the empty dress shoes
     for (const dx of [0, 70]) {
       c.fillStyle = rgba('ink2'); c.strokeStyle = rgba('bone', 0.6); c.lineWidth = 1.5;
