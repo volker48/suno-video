@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "skills": {
+    "fframes-video": {
+      "source": "fframes.studio",
+      "sourceUrl": "https://fframes.studio",
+      "sourceType": "well-known",
+      "computedHash": "45c806648df48d6fdaaf4e9720d5f49fd2562fedba0aaa2cf3a96317c99733d9",
+      "wellKnownDigest": "sha256:e6c63279a6544839f94a3a81763f244f1fe22aba77948b8f837d1a9078c4fa8b"
+    }
+  }
+}
